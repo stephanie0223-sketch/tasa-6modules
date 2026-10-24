@@ -1,0 +1,1689 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>國家太空中心 六大模組 闖關學習</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --ink:#141B4D; --ink2:#2A3470; --muted:#4A5170;
+  --sky:#2EC4F1; --sun:#FFC43D; --coral:#FF5E5B; --mint:#3DDC97; --lav:#A08BFF;
+  --skyD:#1A9CC4; --sunD:#C98A00; --coralD:#C8322F; --mintD:#1FA870;
+  --cream:#FFF4D6; --bg:#F4F8FF; --card:#FFFFFF; --line:#DCE3F5;
+}
+*{margin:0;box-sizing:border-box}
+body{font-family:'Nunito','Noto Sans TC',system-ui,sans-serif;color:var(--ink);
+  background:var(--bg);line-height:1.6;-webkit-text-size-adjust:100%}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px 60px}
+h1,h2,h3,.fred{font-family:Fredoka,'Noto Sans TC',sans-serif;font-weight:700}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.hide{display:none !important}
+
+/* ── 頂部 ───────────────────────── */
+header{background:var(--ink);color:#fff;padding:14px 0 12px;position:sticky;top:0;z-index:50;
+  box-shadow:0 2px 14px rgba(20,27,77,.18)}
+.hd{max-width:980px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:17px;font-weight:700;font-family:Fredoka,'Noto Sans TC',sans-serif}
+.logo small{display:block;font-size:11px;opacity:.72;font-weight:600;font-family:'Noto Sans TC',sans-serif}
+.prog{flex:1;min-width:150px;display:flex;align-items:center;gap:8px}
+.bar{flex:1;height:9px;background:rgba(255,255,255,.22);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--sky));
+  border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.pct{font-size:12px;font-weight:900;min-width:34px;text-align:right}
+.btn-reset{font-size:11px;opacity:.6;text-decoration:underline}
+
+/* ── 地圖 ───────────────────────── */
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:10px;margin:18px 0 10px}
+.node{background:var(--card);border:3px solid var(--line);border-radius:16px;padding:12px 10px;
+  text-align:center;transition:.18s;position:relative;opacity:.55}
+.node.open{opacity:1;border-color:var(--ink);cursor:pointer}
+.node.open:hover{transform:translateY(-3px);box-shadow:0 7px 0 var(--c,var(--sky))}
+.node.done{border-color:var(--mintD);background:#F2FFF9;opacity:1}
+.node.cur{border-color:var(--c,var(--sky));box-shadow:0 0 0 4px color-mix(in srgb,var(--c,var(--sky)) 22%,transparent)}
+.node .ico{font-size:26px;line-height:1}
+.node .nm{font-size:13px;font-weight:900;margin-top:5px}
+.node .en{font-size:10px;color:var(--muted);font-weight:700}
+.node .lk{position:absolute;top:6px;right:8px;font-size:13px}
+
+/* ── 卡片 ───────────────────────── */
+.card{background:var(--card);border:3px solid var(--ink);border-radius:20px;padding:20px;margin-bottom:16px}
+.card.sh{box-shadow:7px 7px 0 var(--c,var(--sky))}
+.chip{display:inline-block;background:var(--c,var(--sky));color:var(--ink);font-weight:800;
+  font-size:11px;letter-spacing:.6px;padding:3px 12px;border-radius:99px}
+.ttl{font-size:23px;margin-top:8px}
+.sub{font-size:13px;color:var(--muted);font-weight:700}
+.lead{background:var(--cream);border:2px solid var(--ink);border-radius:13px;padding:12px 15px;
+  margin-top:13px;font-size:15px;font-weight:700}
+.step-h{display:flex;align-items:center;gap:8px;margin:22px 0 10px}
+.step-n{width:27px;height:27px;border-radius:50%;background:var(--ink);color:#fff;font-weight:900;
+  font-size:13px;display:grid;place-items:center;flex:none}
+.step-t{font-size:17px;font-weight:900}
+
+/* ── 術語卡 ─────────────────────── */
+.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.term{border:2.5px solid var(--ink);border-radius:14px;padding:11px 13px;background:#fff;
+  cursor:pointer;transition:.15s}
+.term:hover{background:var(--cream)}
+.term .w{font-size:17px;font-weight:900;color:var(--skyD)}
+.term .ipa{font-size:11px;color:var(--muted);font-weight:700}
+.term .zh{font-size:14px;font-weight:800;margin-top:3px}
+.term .ex{font-size:12px;color:var(--muted);margin-top:5px;display:none;line-height:1.45}
+.term.on .ex{display:block}
+.term .spk{float:right;font-size:17px}
+
+/* ── 操作區 ─────────────────────── */
+.sim{background:#0E1437;color:#DDE6FF;border-radius:16px;padding:16px;margin-top:4px}
+.sim .goal{background:rgba(46,196,241,.14);border-left:4px solid var(--sky);padding:8px 12px;
+  border-radius:8px;font-size:13.5px;font-weight:700;margin-bottom:13px}
+.readout{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.ro{background:rgba(255,255,255,.07);border-radius:10px;padding:7px 13px;flex:1;min-width:110px}
+.ro b{display:block;font-size:10px;opacity:.65;font-weight:800;letter-spacing:.5px}
+.ro span{font-size:20px;font-weight:900;font-family:Fredoka,sans-serif}
+input[type=range]{width:100%;accent-color:var(--sky);height:26px}
+.rng-lab{display:flex;justify-content:space-between;font-size:11px;opacity:.6;font-weight:700}
+.stage{height:120px;border-radius:11px;background:rgba(255,255,255,.05);position:relative;
+  overflow:hidden;margin:10px 0;display:grid;place-items:center}
+.satstage{height:235px;overflow:visible;background:rgba(255,255,255,.05);border-radius:11px}
+.satsvg{width:235px;max-width:78%;height:auto;overflow:visible}
+#satBody{transform-origin:150px 70px}
+#satWheel{transform-origin:150px 70px}
+@keyframes rot{to{transform:rotate(360deg)}}
+.spinA{animation:rot var(--t,4s) linear infinite}
+.spinB{animation:rot var(--t,1s) linear infinite reverse}
+@media (prefers-reduced-motion:reduce){.spinA,.spinB{animation:none}}
+.msg{font-size:13px;font-weight:700;margin-top:10px;min-height:40px;line-height:1.5}
+.ok{color:var(--mint)}.warn{color:var(--sun)}.bad{color:var(--coral)}
+.pick{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.pick button{border:2.5px solid rgba(255,255,255,.3);border-radius:11px;padding:9px 14px;
+  font-weight:800;font-size:13.5px;color:#DDE6FF;background:rgba(255,255,255,.05)}
+.pick button:hover{border-color:var(--sky)}
+.pick button.sel{background:var(--sky);color:var(--ink);border-color:var(--sky)}
+.pick button.done{background:var(--mint);color:var(--ink);border-color:var(--mint)}
+.pick button:disabled{opacity:.4;cursor:default}
+.card-q{background:rgba(46,196,241,.1);border:2px solid var(--sky);border-radius:12px;
+  padding:13px 16px;font-size:16px;font-weight:800;margin-bottom:11px;line-height:1.5}
+.card-q b{color:var(--sky);font-size:12px;letter-spacing:.5px}
+.built{display:flex;gap:8px;justify-content:center;margin:4px 0 12px}
+.built span{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;
+  font-size:19px;background:rgba(255,255,255,.06);filter:grayscale(1);opacity:.35;transition:.3s}
+.built span.on{filter:none;opacity:1;background:rgba(61,220,151,.22);transform:scale(1.08)}
+@keyframes shk{
+  0%  {transform:translate(calc(var(--a,1) * -1.1px), calc(var(--a,1) *  0.5px)) rotate(calc(var(--a,1) * -0.13deg))}
+  20% {transform:translate(calc(var(--a,1) *  1.2px), calc(var(--a,1) * -0.6px)) rotate(calc(var(--a,1) *  0.16deg))}
+  40% {transform:translate(calc(var(--a,1) * -0.8px), calc(var(--a,1) *  0.7px)) rotate(calc(var(--a,1) * -0.11deg))}
+  60% {transform:translate(calc(var(--a,1) *  1.0px), calc(var(--a,1) * -0.4px)) rotate(calc(var(--a,1) *  0.14deg))}
+  80% {transform:translate(calc(var(--a,1) * -1.2px), calc(var(--a,1) *  0.3px)) rotate(calc(var(--a,1) * -0.15deg))}
+  100%{transform:translate(calc(var(--a,1) * -1.1px), calc(var(--a,1) *  0.5px)) rotate(calc(var(--a,1) * -0.13deg))}
+}
+.sat.shk{animation:shk .14s linear infinite;will-change:transform}
+@media (prefers-reduced-motion:reduce){.sat.shk{animation:none}}
+.node .md{font-size:9.5px;font-weight:900;color:var(--muted);letter-spacing:1px}
+.src{display:block;font-size:11px;color:var(--muted);font-weight:800;margin-top:6px}
+.stepq{background:rgba(255,255,255,.07);border-radius:11px;padding:11px 14px;margin-bottom:11px;
+  font-size:14px;font-weight:700;line-height:1.5}
+.stepq b{color:var(--sun)}
+.stepq.ok-box{background:rgba(61,220,151,.14);border-left:4px solid var(--mint)}
+.chambers{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:7px;margin-bottom:12px}
+.ch{background:rgba(255,255,255,.05);border:2px solid rgba(255,255,255,.12);border-radius:10px;
+  padding:8px 5px;text-align:center;opacity:.45}
+.ch.cur{opacity:1;border-color:var(--sun);background:rgba(255,196,61,.14)}
+.ch.ok{opacity:.92;border-color:var(--mint);background:rgba(61,220,151,.13)}
+.ch .ci{font-size:19px}.ch .cn{font-size:11px;font-weight:800;margin-top:2px}
+.switches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin:12px 0}
+.sw{border:2.5px solid rgba(255,255,255,.2);border-radius:12px;padding:10px;text-align:left;
+  color:#DDE6FF;background:rgba(255,255,255,.05);transition:.15s}
+.sw b{display:block;font-size:13px}
+.sw span{font-size:10px;opacity:.6;font-weight:700}
+.sw i{display:block;font-style:normal;font-size:13px;font-weight:900;margin-top:4px;opacity:.5}
+.sw.on{background:rgba(61,220,151,.2);border-color:var(--mint)}
+.sw.on i{color:var(--mint);opacity:1}
+.taskq,.obs{background:rgba(46,196,241,.12);border:2px solid var(--sky);border-radius:12px;
+  padding:12px 15px;font-size:15px;font-weight:800;margin-bottom:11px;line-height:1.5}
+.taskq b,.obs b{display:block;font-size:11px;color:var(--sky);letter-spacing:.6px;margin-bottom:3px}
+.obs span{font-size:20px;font-family:Fredoka,sans-serif}
+.imgdemo{display:flex;gap:8px;margin:11px 0}
+.half{flex:1;height:72px;border-radius:11px;display:grid;place-items:center;text-align:center;
+  font-size:12px;font-weight:900;line-height:1.4}
+.half small{font-weight:700;opacity:.7;font-size:10px}
+.half.pan{background:linear-gradient(135deg,#8a94b8,#eef1f8);color:#141B4D}
+.half.mul{background:linear-gradient(135deg,#3DDC97,#FFC43D,#FF5E5B);color:#141B4D;
+  image-rendering:pixelated}
+.raybox{height:66px;margin:10px 0;border-radius:11px;background:rgba(255,255,255,.05);
+  position:relative;overflow:hidden}
+.ray{position:absolute;left:8%;right:8%;top:50%;height:3px;background:var(--sky);
+  border-radius:2px;transform:translateY(-50%);
+  clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}
+.ray::after{content:'';position:absolute;inset:0;background:var(--sun);
+  transform:translateY(var(--bend,14px)) rotate(-2deg);border-radius:2px}
+.timeline{height:12px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin:10px 0}
+.tlbar{height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--sun));
+  border-radius:99px;transition:width .35s}
+.pick button small{opacity:.6;font-weight:700}
+.satlab{text-align:center;font-size:11.5px;font-weight:700;opacity:.75;margin:6px 0 2px}
+.satlab b{color:var(--coral)}
+.prin{margin:0 0 6px;padding-left:0;list-style:none;counter-reset:pn}
+.prin li{counter-increment:pn;position:relative;padding:12px 15px 12px 46px;margin-bottom:10px;
+  background:#F7F9FF;border:2px solid var(--line);border-left:6px solid var(--c,var(--sky));
+  border-radius:13px;font-size:14.5px;line-height:1.78;font-weight:600;color:var(--ink)}
+.prin li::before{content:counter(pn);position:absolute;left:13px;top:13px;width:22px;height:22px;
+  border-radius:50%;background:var(--ink);color:#fff;font-size:12px;font-weight:900;
+  display:grid;place-items:center}
+.prin li b{font-weight:900;background:linear-gradient(transparent 62%,var(--cream) 62%);
+  padding:0 1px;border-radius:2px}
+.idbox{background:#F7F9FF;border:2.5px solid var(--ink);border-radius:14px;padding:13px 15px;margin:14px 0 4px}
+.idbox>b{display:block;font-size:14.5px;margin-bottom:2px}
+.idbox>span{display:block;font-size:12.5px;color:var(--muted);font-weight:700;line-height:1.6}
+.idrow{display:grid;grid-template-columns:1.6fr .7fr 1.1fr;gap:8px;margin-top:10px}
+.idrow .inp{width:100%;font-size:14px;padding:9px 12px}
+.iderr{margin-top:8px;font-size:13px;font-weight:900;color:var(--coralD)}
+.idkeep{margin-top:10px;font-size:12.5px;line-height:1.7;font-weight:700;color:var(--ink);
+  background:var(--cream);border:2px solid var(--ink);border-radius:11px;padding:9px 13px}
+.idkeep a{color:var(--skyD);font-weight:900;margin-left:8px;text-decoration:underline}
+.idnow{margin:16px 0 0;font-size:13px;font-weight:700;color:var(--muted)}
+.idnow b{color:var(--ink)}
+.idnow a{color:var(--skyD);font-weight:900;margin-left:8px;text-decoration:underline}
+.redo{background:#FFF6F6;border:2.5px solid var(--coral);border-radius:14px;padding:13px 15px;margin:12px 0}
+.redo>b{display:block;font-size:14px;color:var(--coralD);margin-bottom:9px}
+.rd{display:block;width:100%;text-align:left;background:#fff;border:2.5px solid var(--ink);
+  border-radius:12px;padding:11px 14px;font-size:14.5px;font-weight:900;margin-bottom:8px;
+  color:var(--ink);transition:.12s}
+.rd:hover{background:var(--cream);transform:translateX(3px)}
+.rd span{float:right;font-size:12.5px;color:var(--coralD);font-weight:800}
+@media(max-width:520px){.idrow{grid-template-columns:1fr 1fr}.idrow .inp:last-child{grid-column:1/-1}}
+.gw{font-style:normal;border-bottom:2px dotted var(--skyD);cursor:pointer;
+  padding-bottom:1px;transition:.12s}
+.gw:hover{background:rgba(46,196,241,.18);border-radius:4px}
+.gw.on{background:rgba(46,196,241,.2);border-radius:5px;border-bottom-color:transparent}
+.gw.on::after{content:attr(data-zh);background:var(--sun);color:var(--ink);
+  border-radius:6px;padding:1px 7px;margin-left:6px;font-size:12px;font-weight:900;
+  white-space:nowrap;display:inline-block;vertical-align:middle}
+.opt.lk{cursor:default}
+#gltip b{color:var(--skyD)}
+.more{border:2px dashed var(--line);border-radius:12px;margin:0 0 10px;background:#FAFBFF}
+.more summary{cursor:pointer;padding:9px 14px;font-size:13px;font-weight:900;color:var(--muted);
+  list-style:none}
+.more summary::-webkit-details-marker{display:none}
+.more summary::after{content:' ▾';color:var(--muted)}
+.more[open] summary{color:var(--ink);border-bottom:2px dashed var(--line)}
+.more[open] summary::after{content:' ▴'}
+.more summary b{color:var(--ink)}
+.more>div{padding:11px 15px 13px;font-size:13.5px;line-height:1.8;font-weight:600;color:var(--ink)}
+.more b{font-weight:900;background:linear-gradient(transparent 62%,var(--cream) 62%)}
+.tbw{overflow-x:auto;border:2.5px solid var(--ink);border-radius:14px;margin:2px 0 9px}
+.ktb{border-collapse:collapse;width:100%;min-width:460px;font-size:13px;background:#fff}
+.ktb th{background:var(--ink);color:#fff;padding:10px 12px;text-align:left;
+  font-weight:900;font-size:12.5px;letter-spacing:.3px;white-space:nowrap}
+.ktb td{padding:10px 12px;border-top:1.5px solid var(--line);line-height:1.6;
+  font-weight:600;vertical-align:top;color:var(--ink)}
+.ktb tbody tr:nth-child(even) td{background:#F7F9FF}
+.ktb td.rh{font-weight:900;white-space:nowrap}
+.ktb .zz{font-size:11px;color:var(--muted);font-weight:700}
+.ktb b{font-weight:900;background:linear-gradient(transparent 62%,var(--cream) 62%)}
+.ktb b.on{color:var(--mintD);background:rgba(61,220,151,.22);border-radius:6px;padding:2px 9px;
+  display:inline-block;font-size:12.5px}
+.ktb b.off{color:var(--coralD);background:rgba(255,94,91,.17);border-radius:6px;padding:2px 9px;
+  display:inline-block;font-size:12.5px}
+.tbcap{font-size:13.5px;line-height:1.7;color:var(--ink);font-weight:800;
+  background:var(--cream);border:2px solid var(--ink);border-radius:12px;
+  padding:10px 14px;margin:0 0 6px}
+.term .us{display:none;font-size:12px;line-height:1.6;color:var(--ink);font-weight:600;
+  margin-top:8px;padding-top:8px;border-top:2px dashed var(--line)}
+.term.on .us{display:block}
+.term .us b{font-weight:900;background:linear-gradient(transparent 62%,var(--cream) 62%)}
+.meter{margin:10px 0 4px}
+.meter b{font-size:10px;opacity:.65;font-weight:800;letter-spacing:.5px}
+.mbar{height:11px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin-top:4px}
+.mbar i{display:block;height:100%;width:7%;background:var(--mint);border-radius:99px;transition:width .12s,background .2s}
+.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:9px;margin:11px 0}
+.pt{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.14);border-radius:12px;
+  padding:9px 7px;text-align:center;transition:.2s}
+.pt.bad{background:rgba(255,94,91,.2);border-color:var(--coral)}
+.pt .pi{font-size:21px;line-height:1.1}
+.pt .pn{font-size:11.5px;font-weight:800;margin-top:3px}
+.pt .ps{font-size:10.5px;font-weight:900;margin-top:3px;opacity:.7}
+.pt .pr{font-size:9.5px;font-weight:800;margin-top:2px;opacity:.3}
+.pt .pr.on{opacity:.9;color:var(--sun)}
+.order{font-size:12px;font-weight:800;background:rgba(255,255,255,.06);border-radius:9px;
+  padding:7px 11px;margin-bottom:10px;letter-spacing:.3px}
+.order b{opacity:.6;font-weight:800}
+.order span{font-size:15px}
+.pt.bad .ps{color:var(--coral);opacity:1}
+.slot{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0;min-height:42px}
+.slot i{background:var(--mint);color:var(--ink);border-radius:9px;padding:7px 12px;
+  font-style:normal;font-weight:900;font-size:13px}
+
+/* ── 測驗 ───────────────────────── */
+.q{border:2.5px solid var(--ink);border-radius:14px;padding:14px;margin-bottom:11px;background:#fff}
+.q .qt{font-weight:800;font-size:15px;margin-bottom:9px}
+.badge{font-size:11px;font-weight:900;letter-spacing:.5px;padding:3px 11px;border-radius:99px;
+  line-height:1.5;white-space:nowrap}
+.badge.bas{background:#E8F7FF;color:var(--skyD);border:1.5px solid var(--skyD)}
+.badge.adv{background:#FFF1E2;color:var(--sunD);border:1.5px solid var(--sunD)}
+.opt{display:block;width:100%;text-align:left;border:2px solid var(--line);border-radius:11px;
+  padding:9px 13px;margin-bottom:7px;font-size:14px;font-weight:700;transition:.14s;background:#fff}
+.opt:hover{border-color:var(--sky);background:#F2FBFF}
+.opt.right{border-color:var(--mintD);background:#EAFFF5}
+.opt.wrong{border-color:var(--coralD);background:#FFF0F0}
+.opt:disabled{cursor:default}
+.fb{font-size:13px;font-weight:700;margin-top:7px;padding:9px 12px;border-radius:10px;display:none}
+.fb.show{display:block}
+.fb.good{background:#EAFFF5;color:var(--mintD)}
+.fb.no{background:#FFF0F0;color:var(--coralD)}
+
+/* ── 按鈕 ───────────────────────── */
+.go{display:inline-block;background:var(--ink);color:#fff;border-radius:13px;padding:12px 24px;
+  font-weight:900;font-size:15px;box-shadow:0 5px 0 var(--ink2);transition:.12s}
+.go:hover{transform:translateY(2px);box-shadow:0 3px 0 var(--ink2)}
+.go:disabled{opacity:.35;cursor:default;transform:none}
+.go.sec{background:#fff;color:var(--ink);border:3px solid var(--ink);box-shadow:none}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.hintbtn{font-size:13px;font-weight:800;color:var(--skyD);text-decoration:underline}
+.hintbox{background:#F2FBFF;border:2px dashed var(--skyD);border-radius:11px;padding:10px 13px;
+  font-size:13.5px;font-weight:700;margin-top:9px}
+
+/* ── 證書 ───────────────────────── */
+#cert canvas{width:100%;max-width:820px;border:3px solid var(--ink);border-radius:14px;display:block;margin:0 auto}
+.inp{border:2.5px solid var(--ink);border-radius:11px;padding:10px 14px;font-size:15px;
+  font-weight:800;font-family:inherit;width:220px}
+.scoreline{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:14px 0}
+.sc{background:#fff;border:2.5px solid var(--ink);border-radius:13px;padding:11px;text-align:center}
+.sc b{display:block;font-size:11px;color:var(--muted);font-weight:800}
+.sc span{font-size:25px;font-weight:900;font-family:Fredoka,sans-serif}
+footer{text-align:center;font-size:12px;color:var(--muted);padding:26px 16px;font-weight:700}
+@media(max-width:560px){.ttl{font-size:20px}.card{padding:15px}}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <div class="logo">TASA 六大模組　闖關學習
+      <small>航太工程 × 專業英文　|　國家太空中心</small></div>
+    <div class="prog">
+      <div class="bar"><i id="pbar"></i></div>
+      <div class="pct" id="ppct">0%</div>
+    </div>
+    <button class="btn-reset" onclick="resetAll()">重新開始</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ══════════ 首頁 ══════════ -->
+<section id="home">
+  <div class="card sh" style="--c:var(--sky);margin-top:18px">
+    <span class="chip" style="--c:var(--sky)">MISSION BRIEFING</span>
+    <h1 class="ttl">一顆台灣的衛星，是怎麼被做出來、送上去、用起來的？</h1>
+    <p class="sub">Six modules · from pointing and testing to imaging, weather and communication</p>
+    <div class="lead">
+      六個模組，對應衛星從<b>轉身</b>、<b>受測</b>、<b>抗冷熱</b>、<b>拍照</b>、<b>量天氣</b>到<b>通聯</b>的完整能力。
+      每一關都要你<b>做出判斷</b> —— 選錯會告訴你為什麼錯，不是點一點就過。
+    </div>
+    <p style="margin-top:12px;font-size:13.5px;color:var(--muted);font-weight:700">
+      內容對齊《專業英文暨職場英文》學習手冊，涵蓋福衛五號、福衛七號、獵風者與齊柏林衛星（福衛八號）。
+    </p>
+    <div class="idbox">
+      <b>開始之前，先登記你的身分</b>
+      <span>老師會看到每個人的作答時間與分數。<b>六關全部滿分</b>才拿得到電子證書。</span>
+      <div class="idrow">
+        <input class="inp" id="idc" placeholder="班級（例：電機二忠）" maxlength="12" oninput="idSave()">
+        <input class="inp" id="idn" placeholder="座號" maxlength="4" inputmode="numeric" oninput="idSave()">
+        <input class="inp" id="idm" placeholder="姓名" maxlength="10" oninput="idSave()">
+      </div>
+      <p class="iderr hide" id="iderr">⚠️ 三欄都要填才能開始。</p>
+      <p class="idkeep hide" id="idkeep"></p>
+    </div>
+    <div class="row">
+      <button class="go" onclick="startRun()">開始闖關 →</button>
+      <span style="font-size:13px;font-weight:800;color:var(--muted)">6 模組｜約 30 分鐘｜滿分可領 PDF 證書</span>
+    </div>
+  </div>
+
+  <p class="idnow hide" id="idnow"></p>
+  <h2 style="font-size:18px;margin:22px 0 2px">闖關地圖</h2>
+  <p class="sub">通過測驗才會解鎖下一個模組。題目難度會依你前一關的表現自動調整。</p>
+  <div class="map" id="map"></div>
+</section>
+
+<!-- ══════════ 關卡 ══════════ -->
+<section id="lv" class="hide"></section>
+
+<!-- ══════════ 證書 ══════════ -->
+<section id="cert" class="hide"></section>
+
+</div>
+<footer>Stephanie's English Lab · 專業英文暨職場英文 · 國家太空中心六大模組</footer>
+
+<script>
+/* ═══════════════════════════════════════════
+   關卡資料
+   ═══════════════════════════════════════════ */
+const LV = [
+{
+  key:'aocs', ico:'🛸', nm:'姿態控制', en:'AOCS', c:'var(--sky)',
+  bk:'手冊 P.33,36',
+  title:'太空沒有空氣，衛星怎麼轉身？',
+  lead:'相機要對準目標、太陽能板要對準太陽，衛星就得轉身。但太空沒有空氣可以推 —— 它靠的是<b>角動量守恆</b>：'
+      +'裡面的輪子往一邊轉，衛星就往反方向轉，完全不噴任何東西。',
+  terms:[
+    ['attitude control','/ˈætɪtuːd kənˈtroʊl/','姿態控制','Sensors find the direction, then a motor turns the satellite.'],
+    ['reaction wheel','/riˈækʃn wiːl/','反應輪','A motor spins the wheel; the satellite turns the other way.'],
+    ['thruster','/ˈθrʌstər/','推進器','A thruster changes the orbit, not just the direction.']
+  ],
+  sim:{type:'aocs', hint:'先想：哪一種裝置「不噴東西、也不改變軌道」？選對之後，輪子要轉到讓衛星自旋歸零。'},
+  quiz:{
+    basic:[
+      ['A satellite is slowly tumbling. Its solar panels keep going bright, dark, bright, dark. Why is tumbling a problem?',
+       ['The panels cannot stay facing the Sun, so power drops.','The satellite will fall back to Earth.','The radio antenna melts.'],0,
+       '翻滾會讓太陽能板忽亮忽暗，發電不穩 —— 姿態控制不只是為了拍照，更是為了<b>供電</b>。'],
+      ['A reaction wheel spins up clockwise. What does the satellite body do?',
+       ['It turns anticlockwise.','It also turns clockwise.','It stops moving completely.'],0,
+       '角動量守恆：輪子往一邊轉，衛星本體就往<b>反方向</b>轉。這是整個姿態控制的基礎。']
+    ],
+    adv:[
+      ['Both a thruster and a reaction wheel can turn a satellite. Why is the reaction wheel preferred for everyday pointing?',
+       ['It uses only electricity, while a thruster burns limited propellant.','It is much heavier, so it is more stable.','A thruster cannot turn the satellite at all.'],0,
+       '推進劑帶上去就那麼多，用完任務就結束。反應輪只吃電，而電可以靠太陽能板一直補充。'],
+      ['After months of pointing, the reaction wheels are spinning near their maximum speed and cannot speed up any more. What is the standard fix?',
+       ['Use magnetorquers to push against Earth’s magnetic field and slow the wheels down.','Switch the satellite off and on again.','Let the wheels break and use the payload instead.'],0,
+       '這叫 <b>momentum dumping</b>（動量卸載）：用磁力棒借地球磁場施加外力矩，把輪子累積的角動量倒掉。']
+    ]}
+},
+{
+  key:'ait', ico:'🏭', nm:'整測廠房試煉', en:'AIT Facility', c:'var(--sun)',
+  bk:'手冊 P.34,39｜參訪第一站',
+  title:'發射只有一次機會，先在地面把關卡全部走一遍',
+  lead:'整測廠房是一條<b>單向的通道</b>：衛星從<b>無塵室</b>進場，依序通過<b>音震</b>、<b>振動</b>、'
+      +'<b>熱真空</b>、<b>電磁暗室</b>，最後量完<b>質量特性</b>才准出廠 —— 一共六站。'
+      +'這一關你要親手推著它走完這六站，每一站都要做對一個判斷。',
+  terms:[
+    ['AIT','/eɪ aɪ tiː/','組裝、整合與測試','AIT stands for Assembly, Integration and Test.'],
+    ['acoustic test','/əˈkuːstɪk test/','音震測試','The acoustic test copies the 140 dB noise inside the fairing.'],
+    ['test as you fly','/test æz juː flaɪ/','照飛行狀態測試','Test as you fly: not too little, not too much.']
+  ],
+  sim:{type:'ait', lo:138, hi:144,
+    st:[
+      {ic:'🧼', nm:'無塵室', en:'Cleanroom',
+       q:'衛星要推進廠房了。<b>無塵室的空氣應該怎麼控制？</b>',
+       o:[['保持<b>正壓</b>，乾淨空氣持續往外吹，人員走風淋室進出', 1,
+           '氣流永遠由內往外，外面的髒空氣就擠不進來。這就是正壓無塵室。'],
+          ['抽成<b>負壓</b>，把室內的灰塵吸走', 0,
+           '負壓會把走廊的髒空氣<b>吸進來</b>。無塵室要的是正壓，不是抽風。'],
+          ['不用控制，衛星外面有包覆', 0,
+           '一顆微塵落在光學鏡片上，上了軌道就是一個<b>永久</b>的黑點 —— 沒有人能飛上去擦掉它。']]},
+      {ic:'🔊', nm:'音震艙', en:'Acoustic', acoustic:1},
+      {ic:'📳', nm:'振動台', en:'Vibration',
+       q:'掃頻測試時，某個特定頻率的振幅<b>突然飆高</b>。這代表什麼？',
+       o:[['找到<b>共振點</b> —— 結構在這個頻率最危險，要記錄下來並補強', 1,
+           '共振會把很小的輸入放大成足以折斷結構的擺動。找出它、避開它，就是振動測試的目的。'],
+          ['振動台故障了，要重新校正', 0,
+           '振幅隨頻率變化是<b>結構本身</b>的特性，不是設備故障 —— 這正是測試要找的東西。'],
+          ['衛星太重，撐不住振動台', 0,
+           '重量不會只在某一個頻率出問題。「只在特定頻率放大」是共振的典型特徵。']]},
+      {ic:'❄️', nm:'熱真空艙', en:'Thermal Vacuum',
+       q:'為什麼要<b>先抽成真空</b>再做冷熱循環？只用冷熱箱不行嗎？',
+       o:[['真空裡沒有對流，散熱行為完全不同 —— 不抽真空就測不到真實的熱表現', 1,
+           '地面上熱可以靠空氣帶走，太空只能靠輻射。有空氣的測試會讓衛星「看起來比較涼」，上去就過熱。'],
+          ['真空比較省電，可以降低測試成本', 0,
+           '抽真空的幫浦其實非常耗電。做真空是為了<b>重現太空環境</b>，不是為了省錢。'],
+          ['真空可以把殘留的灰塵吸出去', 0,
+           '清潔是無塵室的工作。熱真空艙要重現的是「沒有空氣可以散熱」這件事。']]},
+      {ic:'📡', nm:'電磁暗室', en:'EMC',
+       q:'暗室裡四面都是吸波尖錐。<b>這一關到底在測什麼？</b>',
+       o:[['所有次系統<b>同時開機</b>，確認自己的雜訊不會蓋掉自己的接收機', 1,
+           '這叫電磁相容：電源、馬達、電腦、通訊全擠在一顆衛星上，最常見的干擾來源就是<b>它自己</b>。'],
+          ['測試衛星會不會被太空中的雷電擊中', 0,
+           '太空沒有雷雨。暗室處理的是衛星<b>內部</b>各系統之間的電磁干擾。'],
+          ['測量天線的訊號可以傳多遠', 0,
+           '通訊距離是用鏈路預算算出來的。暗室的尖錐是為了<b>吸掉反射</b>，做出一個乾淨的量測環境。']]},
+      {ic:'⚖️', nm:'質量特性', en:'Mass Properties',
+       q:'所有測試都通過了。<b>出廠前為什麼還要量重量與重心？</b>',
+       o:[['那是<b>火箭導航的輸入值</b> —— 重心差幾公分，入軌就會偏', 1,
+           '火箭要知道自己推的是什麼。質量、重心、轉動慣量都要填進飛行軟體，所以留到最後量最準。'],
+          ['為了計算運送到發射場的費用', 0,
+           '運費當然要算，但這不值得動用整測廠房的精密量測設備。'],
+          ['確認測試過程中油漆和貼紙沒有脫落', 0,
+           '外觀檢查用目視就好。質量特性量的是會影響<b>飛行軌跡</b>的物理量。']]}
+    ],
+    hint:'照著六個站點一站一站走。音震艙那一站：沒做前置防護就動參數，安全互鎖會跳警報；音壓也不是越大越好。'},
+  quiz:{
+    basic:[
+      ['The engineer tries to raise the sound level before installing the panel dampers. The system blocks the action. Why is this interlock there?',
+       ['The unprotected panels could crack before the test even starts.','The microphone needs time to warm up.','Loud noise would disturb the office next door.'],0,
+       '安全互鎖的存在就是為了防止「人為順序錯誤」弄壞上億元的飛行體 —— 這在真實整測廠房是標準設計。'],
+      ['Why is the acoustic test done with sound, instead of just shaking the satellite on a table?',
+       ['Sound pressure hits large flat surfaces like solar panels from every direction.','Sound is cheaper than a shaker.','The satellite cannot be bolted down.'],0,
+       '音壓是透過空氣從<b>四面八方</b>打在大面積薄板上，這種受力方式振動台做不出來。']
+    ],
+    adv:[
+      ['A test engineer sets the acoustic level to 155 dB, far above the flight level. What is wrong with "being extra safe"?',
+       ['Over-testing can damage flight hardware that would have survived the real launch.','Nothing is wrong; more is always safer.','The test would finish too quickly.'],0,
+       '這就是 <b>Test as You Fly</b>：過度測試會把本來沒問題的飛行體弄壞，不足則會漏掉瑕疵。嚴苛要「恰如其分」。'],
+      ['The satellite passes acoustic, vibration and thermal vacuum. Why are mass properties still measured afterwards?',
+       ['The rocket needs the exact mass and centre of gravity to fly the right trajectory.','To check the paint did not come off.','To decide how much the satellite costs.'],0,
+       '質量特性是火箭導航的輸入值。重心差幾公分，入軌就會偏 —— 所以要在所有測試之後、出廠之前量。']
+    ]}
+},
+{
+  key:'tcs', ico:'🛡️', nm:'軌道冷熱盾', en:'Thermal Control', c:'var(--lav)',
+  bk:'手冊 P.32,33,36',
+  title:'90 分鐘繞一圈，一下烤箱一下冰庫',
+  lead:'低軌衛星以每秒 7.8 公里飛行，<b>約 90–100 分鐘繞地球一圈</b>。向陽面外部高達 +120°C，'
+      +'飛進地球陰影又掉到 −100°C。晶片和鋰電池超過 +60°C 會熱失控，所以核心必須穩在 <b>−10 ~ +25°C</b>。',
+  terms:[
+    ['MLI','/ˌem el ˈaɪ/','多層絕熱材','MLI blocks heat from coming in and from leaking out.'],
+    ['radiator','/ˈreɪdieɪtər/','輻射散熱片','A radiator throws waste heat out into space.'],
+    ['heater','/ˈhiːtər/','電加熱器','A heater keeps the battery warm in eclipse.']
+  ],
+  sim:{type:'tcs',
+    hint:'向陽面要「擋外面的熱、排裡面的熱」；地影面要「保住裡面的熱」。同一套硬體，兩種時段的組合不一樣。'},
+  quiz:{
+    basic:[
+      ['In sunlight the satellite is overheating. Which combination makes sense?',
+       ['MLI on, radiator on, heater off','MLI off, radiator off, heater on','MLI on, radiator off, heater on'],0,
+       '向陽面：用 MLI 擋住外面的熱，用散熱片把裡面的廢熱丟掉，加熱器當然要關。'],
+      ['Why does a satellite need a heater at all, when space seems to be full of sunlight?',
+       ['In Earth’s shadow there is no sunlight and the temperature falls fast.','Heaters make the radio stronger.','Heaters are used to melt ice on the lens.'],0,
+       '繞到地球背面就完全沒有日照，溫度急降 —— 電池最怕冷，這時候要靠加熱器保溫。']
+    ],
+    adv:[
+      ['MLI blocks heat flowing in. Why does the same blanket also help during eclipse?',
+       ['Insulation works both ways: it also stops inside heat from leaking out.','It generates heat by itself at night.','It reflects moonlight onto the battery.'],0,
+       '絕熱是<b>雙向</b>的。白天擋外面的熱進來，晚上擋裡面的熱出去 —— 所以 MLI 兩個時段都開著。'],
+      ['A satellite completes about 15 orbits a day. What does that mean for its thermal design?',
+       ['It goes through about 15 hot-cold cycles every day, so parts must survive thousands of cycles.','It only gets hot once a day.','Temperature never changes in orbit.'],0,
+       '一天 15 圈就是一天 15 次冷熱循環，一年超過 5000 次。這正是熱真空測試要跑很多循環的原因。']
+    ]}
+},
+{
+  key:'eye', ico:'🦅', nm:'太空鷹眼', en:'Optical Payload', c:'var(--coral)',
+  bk:'手冊 P.28,36,38,42',
+  title:'要看得「細」，還是看得「有顏色」？',
+  lead:'2017 年福衛五號是台灣首顆自製光學衛星：<b>黑白 2 公尺</b>、<b>彩色 4 公尺</b>。'
+      +'2025 年底升空的<b>齊柏林衛星（福衛八號首顆星）</b>關鍵元件 84% 台灣自製。'
+      +'但解析度和顏色是兩回事 —— 任務不同，要的影像也不同。',
+  terms:[
+    ['panchromatic','/ˌpænkrəˈmætɪk/','全色態（黑白高解析）','Panchromatic images are sharp but have no colour.'],
+    ['multispectral','/ˌmʌltiˈspektrəl/','多光譜（彩色）','Multispectral images show colour but are less sharp.'],
+    ['pan-sharpening','/pæn ˈʃɑːrpnɪŋ/','影像融合','Pan-sharpening merges the sharp one with the colour one.']
+  ],
+  sim:{type:'eye',
+    hint:'先問自己：這個任務靠「形狀」判斷，還是靠「顏色」判斷？兩個都要，才需要融合。'},
+  quiz:{
+    basic:[
+      ['A 4-metre colour image means one pixel covers 4 m on the ground. Why is it hard to count cars with it?',
+       ['A car is smaller than one pixel, so it has no clear shape.','Cars are always the same colour as the road.','4-metre images are always blurry from cloud.'],0,
+       '一台車大約 4–5 公尺，在 4 公尺一格的影像裡只佔不到一格 —— 形狀根本出不來。'],
+      ['Which task needs COLOUR more than sharpness?',
+       ['Finding which part of a rice field is sick','Counting vehicles on a runway','Measuring the width of a road'],0,
+       '作物病蟲害是靠反射光譜（顏色）判斷的，不是靠形狀 —— 這時候彩色比銳利重要。']
+    ],
+    adv:[
+      ['Pan-sharpening combines a 2 m black-and-white image with a 4 m colour image. What does the final image give you?',
+       ['The sharpness of 2 m with the colour information of 4 m','A 1 m image with perfect colour','A 4 m image with no colour'],0,
+       '融合取兩者之長：用黑白的銳利度帶出細節，用彩色的光譜填上顏色 —— 救災地圖就是這樣做出來的。'],
+      ['The Chi Po-lin satellite has 84% of its key parts made in Taiwan. Why does that number matter beyond national pride?',
+       ['Taiwan can repair, improve and build the next satellites without waiting for other countries.','It makes the satellite lighter.','It means the images are 84% clearer.'],0,
+       '自製率代表的是<b>自主能力</b>：技術留在國內，下一顆才做得更快更好，不受制於人。']
+    ]}
+},
+{
+  key:'ro', ico:'🌡️', nm:'掩星氣象', en:'Radio Occultation', c:'var(--mint)',
+  bk:'手冊 P.28,29,44',
+  title:'氣象氣球飛不進颱風中心，衛星怎麼量？',
+  lead:'2019 年升空的<b>福衛七號</b>（六顆星）用了一個巧妙的方法：GPS 訊號穿過大氣層時會<b>折射彎曲</b>，'
+      +'就像筷子插進水裡看起來斷掉。水氣越多，彎得越厲害。量彎曲角，就能<b>反推</b>整層大氣的溫度與濕度。',
+  terms:[
+    ['radio occultation','/ˌɑːkʌlˈteɪʃn/','無線電掩星','Radio occultation measures how GPS signals bend.'],
+    ['bending angle','/ˈbendɪŋ ˈæŋɡl/','彎曲角','More water vapour means a larger bending angle.'],
+    ['retrieval','/rɪˈtriːvl/','反演','Retrieval means working backwards from the signal to the weather.']
+  ],
+  sim:{type:'ro',
+    hint:'水氣越多，折射率越大，訊號彎得越厲害、延遲也越久。比較三組數據的大小關係就能排出來。'},
+  quiz:{
+    basic:[
+      ['A GPS signal passes through the atmosphere and bends. What makes it bend MORE?',
+       ['More water vapour along the path','A brighter Sun','A faster satellite'],0,
+       '折射率主要由空氣密度與<b>水氣</b>決定。水氣越多，彎曲角越大。'],
+      ['Why can FORMOSAT-7 measure inside a typhoon when a weather balloon cannot?',
+       ['The measurement is made from space, so nothing has to fly into the storm.','Balloons are too expensive.','Typhoons have no water vapour.'],0,
+       '掩星是<b>遙測</b>：訊號穿過颱風，接收端在太空。不需要把儀器送進風眼。']
+    ],
+    adv:[
+      ['Radio occultation does not measure temperature directly. What does it actually measure?',
+       ['How much the radio signal bends and is delayed','The colour of the clouds','The speed of the wind at the surface'],0,
+       '它量的是<b>訊號</b>（彎曲角與相位延遲），溫濕度是用物理關係<b>反演</b>出來的 —— 這就是 retrieval。'],
+      ['FORMOSAT-7 provides about 4,000 vertical profiles a day all over the globe. Why is global coverage so valuable for Taiwan’s typhoon forecast?',
+       ['Typhoons form far out over the ocean where there are no weather stations.','Taiwan has too many weather stations already.','Global data makes the satellite lighter.'],0,
+       '颱風在遠洋生成，那裡沒有測站也沒有人。掩星能補上這塊<b>資料空白區</b>，路徑預報才會準。']
+    ]}
+},
+{
+  key:'pass', ico:'📡', nm:'過境通訊', en:'10-Minute Pass', c:'var(--sun)',
+  bk:'手冊 P.34,40｜參訪第二站',
+  title:'衛星飛過台灣上空，你只有 10 分鐘',
+  lead:'低軌衛星每次飛過地面站只有<b>約 10 分鐘</b>可以通聯，一天只有幾次機會。'
+      +'10 樓操控中心必須在這 10 分鐘內完成：追蹤對準、接收遙測、上傳指令、下載影像 —— '
+      +'而且<b>順序不能錯</b>。',
+  terms:[
+    ['pass','/pæs/','過境','One pass over the ground station lasts about 10 minutes.'],
+    ['telemetry','/təˈlemətri/','遙測（下傳）','Telemetry tells us the battery and temperature.'],
+    ['S-band / X-band','/es bænd/','S 波段／X 波段','S-band is wide and safe; X-band is narrow and fast.']
+  ],
+  sim:{type:'pass',
+    hint:'X-Band 波束很窄，速度快但必須先對準。想想看：沒瞄準就開槍會怎樣？'},
+  quiz:{
+    basic:[
+      ['Why must the ground station use S-band before switching to X-band?',
+       ['S-band has a wide beam, so it can lock on and align the antenna first.','S-band is faster than X-band.','X-band does not work in daylight.'],0,
+       'S 波段波束寬、容錯高，適合先鎖定與對準；X 波段波束窄，沒對準就會射偏。'],
+      ['A pass lasts about 10 minutes. What does that mean for the operators?',
+       ['Every task must be planned in advance and done in the right order.','They can repeat any task as many times as they like.','They have 24 hours to finish.'],0,
+       '10 分鐘過完衛星就飛走了。所有動作必須事先排好，不能臨場摸索。']
+    ],
+    adv:[
+      ['X-band is much faster than S-band. Why not use X-band for everything, including commands?',
+       ['Its narrow beam is easily lost; commands must get through reliably, not quickly.','X-band cannot carry commands at all.','X-band is illegal over Taiwan.'],0,
+       '指令只要<b>一定送到</b>，不需要快；影像才需要快。可靠度和速度是不同的需求，所以用不同波段。'],
+      ['When the undersea cables to Matsu were cut, satellites kept people online. Which property of satellite links made that possible?',
+       ['The link goes through space, so it does not depend on any cable on the seabed.','Satellites can physically repair cables.','Satellite signals travel faster than light.'],0,
+       '衛星鏈路完全不經過海底 —— 這就是它作為<b>備援</b>的價值：實體基礎設施斷了，天上這條還在。']
+    ]}
+}
+];
+
+/* ═══════════════════════════════════════════
+   每個模組的「原理」與「對照表」—— 測驗題目全部可以從這裡推出來
+   ═══════════════════════════════════════════ */
+const DEEP = {
+aocs:{
+  why:[    '太空沒有空氣可以推、也沒有摩擦力，衛星<b>一開始轉就停不下來</b>。',
+    '<b>角動量守恆</b>：輪子往一邊轉，衛星本體就往<b>反方向</b>轉 —— 全程不噴出任何東西。',
+    '指向不只是為了拍照 —— <b>太陽能板要對準太陽才發得出電</b>，姿態亂掉整顆衛星就癱了。'
+  ],
+  more:'輪子有轉速上限，一直吸收角動量總會<b>飽和</b>轉不動。這時要用<b>磁力棒</b>借地球磁場施加一個「外部」力矩，把角動量倒出去 —— 這叫 <b>momentum dumping 動量卸載</b>。',
+  tb:[['裝置','消耗什麼','能改變什麼','什麼時候用'],
+      ['reaction wheel<br><span class=zz>反應輪</span>','電（太陽能板可一直補）','<b>只改指向</b>','日常拍照對準、追蹤目標'],
+      ['thruster<br><span class=zz>推進器</span>','<b>推進劑（用完就沒了）</b>','指向＋<b>軌道</b>','變軌、閃避、任務結束離軌'],
+      ['magnetorquer<br><span class=zz>磁力棒</span>','電','借地球磁場產生<b>外</b>力矩','輪子飽和時卸載角動量']],
+  tbcap:'看懂這張表，就知道為什麼「日常轉身」一定用反應輪：推進劑是有限的，用完任務就結束了。',
+  use:['先由星象儀／太陽感測器判斷「現在朝哪」，再由致動器轉過去 —— 感測＋致動才叫控制。',
+       '唯一不消耗物質的轉向方式。缺點是會累積角動量、需要定期卸載。',
+       '噴出物質才能改變軌道。反應輪再怎麼轉也改不了衛星的飛行路徑。']
+},
+ait:{
+  why:[    '發射<b>只有一次機會</b>，上去之後沒有人能修，所以先在地面通過一輪最嚴苛的考驗。',
+    '升空瞬間超過 <b>140 分貝</b>。聲音是壓力波，<b>從四面八方</b>打在太陽能板這種大薄板上 —— 把衛星鎖在振動台上做不出這種受力。',
+    '<b>Test as You Fly</b>：測試條件要等於飛行條件，<b>不是越嚴越好</b> —— 測太重會把本來撐得過發射的衛星弄壞。'
+  ],
+  more:'整測有<b>固定順序與安全互鎖</b>：防護還沒裝好就加大音壓，衛星會在測試正式開始前就被震壞。<br>全部測完還要量<b>質量特性</b>（重量、重心、慣量），因為那是<b>火箭導航的輸入值</b> —— 重心差幾公分，入軌就會偏。',
+  tb:[['測試艙','模擬的是','要找出的弱點'],
+      ['acoustic<br><span class=zz>音震</span>','整流罩內 140 dB 聲壓','大面積薄板破裂、焊點鬆脫'],
+      ['vibration<br><span class=zz>振動</span>','火箭結構傳上來的振動','<b>共振</b>把結構震斷'],
+      ['thermal vacuum<br><span class=zz>熱真空</span>','真空＋反覆冷熱循環','元件在極端溫度下失效'],
+      ['EMC<br><span class=zz>電磁相容</span>','各系統同時開機互相干擾','自己的雜訊蓋掉自己的接收機'],
+      ['mass properties<br><span class=zz>質量特性</span>','（這是量測，不是模擬）','重心偏移造成入軌偏差']],
+  tbcap:'五關的順序不是隨便排的：先確認撐得住發射（音震、振動），再確認在太空活得下去（熱真空、EMC），最後才量出廠數據。',
+  use:['A=組裝零件、I=整合成一顆、T=測試驗證。缺一不可，而且是這個順序。',
+       '用喇叭陣列在混響室裡重現發射噪音，測的是「聲壓打在面上」。',
+       '測試嚴苛度要<b>恰如其分</b>：不足會漏掉瑕疵，過度會自己弄壞飛行體。']
+},
+tcs:{
+  why:[    '真空裡沒有空氣，熱不能靠對流帶走 —— <b>散熱唯一的出口是輻射</b>，所以不能像電腦一樣裝風扇。',
+    '90 分鐘繞一圈：向陽面外部 +120°C，飛進地影掉到 −100°C，<b>一天要經歷 15 次冷熱循環</b>。',
+    '三個工具各管一個方向：<b>MLI 擋住熱的進出（雙向）</b>、<b>散熱片只能往外丟熱</b>、<b>加熱器只能往內加熱</b>。'
+  ],
+  more:'衛星內部的電子設備<b>一直在發熱</b>，在地影裡也照樣發熱 —— 所以真正要管的不是「外面幾度」，而是<b>淨熱量</b>。<br>而<b>鋰電池最怕冷</b>，低於 −10°C 容量會急掉甚至永久損傷，所以熱控設計是遷就<b>最脆弱的那個元件</b>，不是看平均值。',
+  tb:[['時段','外面的環境','MLI','radiator','heater','理由'],
+      ['<b>向陽面</b><br><span class=zz>sunlight</span>','+120°C<br>太陽一直曬','<b class=on>開</b>','<b class=on>開</b>','<b class=off>關</b>','擋住外面的熱進來，同時把內部廢熱丟出去 —— 此時熱是「太多」'],
+      ['<b>地影面</b><br><span class=zz>eclipse</span>','−100°C<br>完全沒日照','<b class=on>開</b>','<b class=off>少用</b>','<b class=on>開</b>','保住內部僅有的熱，再補熱給電池 —— 此時熱是「不夠」']],
+  tbcap:'注意 MLI 那一欄：兩個時段都是「開」。因為絕熱是雙向的，它不是「防曬」，是「保溫瓶」。',
+  use:['像保溫瓶的夾層。它<b>不產生也不帶走</b>熱，只是把熱擋在牆的另一邊 —— 兩個方向都擋。',
+       '刻意做成高發射率、朝向深太空的那一面，把廢熱以紅外線輻射的形式丟進宇宙。',
+       '吃電的電阻絲。在地影時優先保住鋰電池，因為電池是最怕冷的元件。']
+},
+eye:{
+  why:[    '解析度 2 公尺＝影像上一格代表地面 2×2 公尺。<b>比一格還小的東西，形狀就出不來</b>（一台車才 4–5 公尺）。',
+    '<b>彩色一定比黑白粗</b>：光分成紅綠藍近紅外之後，每個波段分到的光變少，像素只好做大。這是物理取捨，不是技術不好。',
+    '<b>pan-sharpening 影像融合</b>：2 公尺黑白的「細節」＋ 4 公尺彩色的「顏色」＝ 一張 2 公尺的彩色圖。'
+  ],
+  more:'多光譜含肉眼看不到的<b>近紅外</b>。植物健康時近紅外反射特別強，一生病就掉 —— 所以農損判釋靠顏色，不靠形狀。<br>齊柏林衛星關鍵元件 <b>84% 台灣自製</b>，意義不是面子而是<b>自主能力</b>：能自己維修、自己改良、自己做下一顆，不必等別的國家賣給你。',
+  tb:[['','panchromatic 全色','multispectral 多光譜'],
+      ['收什麼光','可見光<b>全部合在一起</b>','<b>分成</b>紅／綠／藍／近紅外'],
+      ['福衛五號','<b>2 公尺</b>','4 公尺'],
+      ['強項','形狀、邊界、數量','顏色、材質、植物健康'],
+      ['適合的任務','數車輛、量道路寬、看建物倒塌','判斷作物病蟲害、分辨水質、土地利用分類'],
+      ['弱點','看不出顏色','看不出細小形狀']],
+  tbcap:'先問自己：這個任務是靠「形狀」判斷，還是靠「顏色」判斷？兩個都要，才需要融合。',
+  use:['全色＝全部顏色混在一起收，所以最亮最銳利，代價是沒有顏色資訊。',
+       '多＝多個波段。含肉眼看不到的近紅外，這正是判斷植物健康的關鍵波段。',
+       '不是把照片變清楚的濾鏡，是把<b>兩張不同的影像</b>的優點合成一張。']
+},
+ro:{
+  why:[    '訊號穿過大氣層會<b>折射彎曲</b>，就像筷子插進水裡看起來斷掉。<b>水氣越多，彎得越厲害</b>。',
+    '福七<b>量到的根本不是溫度濕度</b>，是<b>彎曲角與延遲</b>；溫濕度是再用物理關係<b>反推</b>出來的，這叫 retrieval 反演。',
+    '接收端在太空，訊號穿過颱風就好 —— <b>不必把儀器送進風眼</b>，氣象氣球做不到這件事。'
+  ],
+  more:'福七一天提供<b>約 4,000 組</b>全球垂直剖線，正好補上「遠洋沒有測站」這塊資料空白 —— 而颱風就是在那裡生成的。路徑預報準不準，很大一部分靠這些資料。',
+  tb:[['','無線電掩星 RO','氣象氣球 radiosonde'],
+      ['儀器在哪','<b>太空</b>（衛星接收 GPS 訊號）','<b>儀器本身要飛進大氣</b>'],
+      ['颱風中心','量得到','進不去、會被打壞'],
+      ['遠洋上空','量得到','幾乎沒有測站'],
+      ['一天資料量','<b>約 4,000 組</b>全球垂直剖線','固定測站，一天約兩次'],
+      ['直接量到的是','<b>彎曲角與延遲</b>','溫度、濕度、氣壓（直接量）']],
+  tbcap:'最後一列是關鍵：氣球是「伸手去摸」，掩星是「看訊號被折彎多少再推回去」。',
+  use:['occultation 原指天體被遮掩。這裡指 GPS 衛星即將被地球遮住、訊號正好擦過大氣層的那一刻。',
+       '訊號偏離直線的角度。它是<b>實際量到的數字</b>，溫濕度要再推一步才有。',
+       '從「訊號」倒推回「大氣狀態」。沒有這一步，彎曲角只是一個角度而已。']
+},
+pass:{
+  why:[    '衛星每秒飛 <b>7.8 公里</b>，對同一個地面站<b>只看得到約 10 分鐘</b>，過完就飛走，不能重來。',
+    '<b>波束寬和傳得快，二選一</b>：S-band 波束寬、容易對上但慢；X-band 快，但稍微沒對準就完全收不到。',
+    '所以順序固定：<b>先用 S-band 鎖定對準、收遙測、傳指令，最後才切 X-band 狂下載影像</b>。'
+  ],
+  more:'背後是<b>兩種不同的需求</b>：<b>指令要的是「一定送到」</b>，<b>影像要的是「快」</b> —— 所以用兩個波段，而不是全部用最快的那個。<br>衛星鏈路<b>完全不經過海底電纜</b>，馬祖海纜被切斷時還能通，靠的就是這一點。',
+  tb:[['','S-band','X-band'],
+      ['頻率','約 2 GHz（低）','約 8 GHz（高）'],
+      ['波束','<b>寬</b>，容易對上、容錯高','<b>窄</b>，必須先對準'],
+      ['資料率','慢','<b>快</b>'],
+      ['拿來做','遙測下傳、<b>指令上傳</b>','<b>影像下載</b>'],
+      ['真正要的是','<b>可靠</b>','<b>速度</b>']],
+  tbcap:'為什麼不全部用 X-band？因為指令傳丟了，衛星可能就救不回來。可靠和快，是兩種需求。',
+  use:['一次過境＝衛星從升起到落下的這段時間，約 10 分鐘。',
+       'tele-（遠）＋ -metry（量測）。把衛星的電壓、溫度、轉速傳下來，確認它還活著。',
+       '波段的選擇是在「對得準」和「傳得快」之間做取捨。']
+}
+};
+LV.forEach(l=>Object.assign(l, DEEP[l.key]));
+
+/* ═══════════════════════════════════════════
+   進度
+   ═══════════════════════════════════════════ */
+const KEY='tasa6_progress_v1';
+
+/* ╔══════════════════════════════════════════════════════╗
+   ║  老師請在這裡貼上 Google Apps Script 的網址           ║
+   ║  （設定步驟見「老師使用說明.md」）                     ║
+   ║  留空白的話網站照常運作，只是不會回傳紀錄              ║
+   ╚══════════════════════════════════════════════════════╝ */
+const API = 'https://script.google.com/macros/s/AKfycbx621BcKLz4RhEHIZFQ0C9cAmrBlJR_tenpalzkvRsY9YTbS75Gv12Cc5y8An8cqQ0aNQ/exec';
+
+const H_LOG = ['時間','班級','座號','姓名','模組','題型','得分','滿分','用了提示','本關用時(秒)','第幾次'];
+const H_SUM = ['完成時間','班級','座號','姓名','總分','答對題數','總題數','使用提示','總用時(分)','總嘗試次數','是否滿分'];
+function stamp(){
+  const d=new Date(), z=x=>String(x).padStart(2,'0');
+  return `${d.getFullYear()}/${z(d.getMonth()+1)}/${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}:${z(d.getSeconds())}`;
+}
+function report(sheet, head, row){
+  if(!API) return;
+  try{
+    fetch(API, {method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({sheet, head, row})});
+  }catch(e){}
+}
+
+let P = load();
+function load(){
+  try{const r=localStorage.getItem(KEY); if(r) return JSON.parse(r);}catch(e){}
+  return {done:[], score:{}, hints:{}, tries:{}, name:'', id:null, t0:0, who:''};
+}
+function save(){ try{localStorage.setItem(KEY,JSON.stringify(P));}catch(e){} }
+function resetAll(){
+  if(!confirm('確定要清掉進度，重新開始嗎？（班級座號姓名會保留）')) return;
+  const id=P.id, nm=P.name, wk=P.who;
+  P={done:[],score:{},hints:{},tries:{},name:nm,id:id,t0:0,who:wk}; save(); go(-1);
+}
+
+/* ── 身分 ── */
+const vv = id => (document.getElementById(id)||{value:''}).value.trim();
+function idSave(){
+  P.id = {cls:vv('idc'), no:vv('idn'), name:vv('idm')};
+  P.name = P.id.name; save();
+  document.getElementById('iderr').classList.add('hide');
+}
+function idFill(){
+  if(P.id){
+    const m={idc:'cls', idn:'no', idm:'name'};
+    for(const k in m){ const el=document.getElementById(k); if(el) el.value=P.id[m[k]]||''; }
+  }
+  const k=document.getElementById('idkeep'); if(!k) return;
+  if(P.done.length && P.who){
+    const w=P.who.split('|');
+    k.classList.remove('hide');
+    k.innerHTML=`📌 這台裝置上已經有 <b>${w[0]}　${w[1]} 號　${w[2]}</b> 的進度`
+      +`（完成 ${P.done.length}/${LV.length} 關）。<br>`
+      +`換人用的話，<b>直接改上面的姓名座號就好</b> —— 按開始時會自動清成新的一份。`
+      +`<a href="#" onclick="event.preventDefault();resetAll()">或現在就清掉</a>`;
+  } else k.classList.add('hide');
+}
+function who(){ return P.id ? [P.id.cls, P.id.no, P.id.name] : ['','','']; }
+function startRun(){
+  idSave();
+  if(!P.id.cls || !P.id.no || !P.id.name){
+    document.getElementById('iderr').classList.remove('hide'); return;
+  }
+  const key=[P.id.cls,P.id.no,P.id.name].join('|');
+  if(P.who && P.who!==key){        // 換人了（同一台裝置給下一位用）→ 自動清掉上一位的進度
+    P.done=[]; P.score={}; P.hints={}; P.tries={}; P.t0=0;
+  }
+  P.who=key; save();
+  if(!P.t0){
+    P.t0 = Date.now(); save();
+    report('作答紀錄', H_LOG, [stamp(), ...who(), '▶ 開始闖關','','','','','','']);
+  }
+  go(0);
+}
+function unlocked(i){ return i===0 || P.done.includes(LV[i-1].key); }
+function pct(){ return Math.round(P.done.length/LV.length*100); }
+function refreshBar(){
+  document.getElementById('pbar').style.width=pct()+'%';
+  document.getElementById('ppct').textContent=pct()+'%';
+}
+
+/* ═══════════════════════════════════════════
+   地圖
+   ═══════════════════════════════════════════ */
+function drawMap(){
+  document.getElementById('map').innerHTML = LV.map((l,i)=>{
+    const done=P.done.includes(l.key), open=unlocked(i);
+    return `<div class="node ${done?'done':''} ${open?'open':''}" style="--c:${l.c}"
+      ${open?`onclick="go(${i})"`:''}>
+      <div class="lk">${done?'✅':(open?'':'🔒')}</div>
+      <div class="ico">${l.ico}</div>
+      <div class="md">MOD 0${i+1}</div>
+      <div class="nm">${l.nm}</div>
+      <div class="en">${l.en}</div>
+      </div>`;
+  }).join('');
+  refreshBar();
+}
+
+/* ═══════════════════════════════════════════
+   導覽
+   ═══════════════════════════════════════════ */
+function show(id){
+  ['home','lv','cert'].forEach(s=>document.getElementById(s).classList.toggle('hide',s!==id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showWho(){
+  const el=document.getElementById('idnow'); if(!el) return;
+  if(!P.id || !P.id.name){ el.classList.add('hide'); return; }
+  el.classList.remove('hide');
+  el.innerHTML=`👤 <b>${P.id.cls}　${P.id.no} 號　${P.id.name}</b>
+    <a href="#" onclick="event.preventDefault();window.scrollTo(0,0);document.getElementById('idm').focus()">改</a>`;
+}
+function go(i){
+  refreshBar(); showWho(); idFill();
+  if(i<0){ drawMap(); show('home'); return; }
+  if(i>=LV.length){ drawCert(); show('cert'); return; }
+  drawLevel(i); show('lv');
+}
+
+/* ═══════════════════════════════════════════
+   發音
+   ═══════════════════════════════════════════ */
+function say(t){
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(t);
+    u.lang='en-US'; u.rate=.86;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* ═══════════════════════════════════════════
+   點讀字典：英文題目點一下 → 念出來 ＋ 顯示中文
+   ═══════════════════════════════════════════ */
+const GLOSS = {
+/* 共用 */
+'satellite':'衛星','orbit':'軌道','launch':'發射','rocket':'火箭','engineer':'工程師',
+'test':'測試','measure':'量測','signal':'訊號','power':'電力','temperature':'溫度',
+'surface':'表面','damage':'損壞','survive':'撐過、存活','repair':'維修','matter':'重要',
+'prefer':'偏好、優先選用','instead':'而不是','afterwards':'之後','standard':'標準的',
+'reliable':'可靠的','reliably':'可靠地','speed':'速度','direction':'方向','payload':'酬載',
+/* 姿態控制 */
+'attitude control':'姿態控制','reaction wheel':'反應輪','thruster':'推進器',
+'tumble':'翻滾','tumbling':'翻滾','solar panel':'太陽能板','bright':'亮','dark':'暗',
+'antenna':'天線','melt':'融化','spin up':'加速旋轉','clockwise':'順時針',
+'anticlockwise':'逆時針','satellite body':'衛星本體','pointing':'指向',
+'propellant':'推進劑','electricity':'電','heavier':'比較重','stable':'穩定',
+'maximum speed':'最高轉速','magnetorquer':'磁力棒','magnetic field':'磁場',
+'drop':'下降','fall back':'掉回','switch off':'關掉','break':'壞掉',
+/* 整測廠房 */
+'acoustic':'音震的、聲學的','acoustic level':'音壓','flight level':'飛行狀態的量值',
+'over-testing':'過度測試','flight hardware':'飛行體硬體','interlock':'安全互鎖',
+'damper':'減震護具','crack':'裂開','microphone':'麥克風','sound pressure':'聲壓',
+'flat surface':'平面','shaker':'振動台','bolt down':'鎖固','mass properties':'質量特性',
+'centre of gravity':'重心','trajectory':'飛行軌跡','paint':'油漆','vibration':'振動',
+'thermal vacuum':'熱真空','cleanroom':'無塵室','warm up':'暖機','disturb':'干擾',
+'install':'安裝','extra safe':'格外保險','cost':'花費、成本','cheap':'便宜',
+/* 熱控 */
+'sunlight':'日照','overheat':'過熱','overheating':'過熱','combination':'組合',
+'make sense':'說得通、合理','radiator':'輻射散熱片','heater':'電加熱器',
+'eclipse':'地影（進入地球陰影）','shadow':'陰影','insulation':'絕熱',
+'blanket':'包覆層、毯','leak out':'漏出去','reflect':'反射','moonlight':'月光',
+'battery':'電池','cycle':'循環','thermal design':'熱控設計','ice':'冰','lens':'鏡頭',
+/* 光學酬載 */
+'pixel':'像素','ground':'地面','count':'計算數量','vehicle':'車輛','runway':'跑道',
+'width':'寬度','blurry':'模糊的','cloud':'雲','colour':'顏色','sharp':'銳利的',
+'sharpness':'銳利度','rice field':'稻田','sick':'生病的','panchromatic':'全色（黑白高解析）',
+'multispectral':'多光譜（彩色）','pan-sharpening':'影像融合','black-and-white':'黑白',
+'key part':'關鍵元件','improve':'改良','national pride':'民族自豪','lighter':'比較輕',
+'clearer':'比較清晰','merge':'融合','shape':'形狀','road':'道路',
+/* 掩星氣象 */
+'radio occultation':'無線電掩星','bending angle':'彎曲角','retrieval':'反演',
+'atmosphere':'大氣層','bend':'彎曲','water vapour':'水氣','path':'路徑',
+'weather balloon':'氣象氣球','storm':'風暴','typhoon':'颱風','directly':'直接地',
+'delay':'延遲','wind':'風','vertical profile':'垂直剖線','global coverage':'全球覆蓋',
+'forecast':'預報','ocean':'海洋','weather station':'氣象測站','fly into':'飛進',
+'expensive':'昂貴的','pass through':'穿過',
+/* 過境通訊 */
+'ground station':'地面站','telemetry':'遙測','wide beam':'寬波束','narrow beam':'窄波束',
+'lock on':'鎖定','align':'對準','daylight':'白天','operator':'操作員',
+'in advance':'事先','repeat':'重複','command':'指令','illegal':'違法的',
+'undersea cable':'海底電纜','seabed':'海床','online':'連線的','physically':'實體上',
+'property':'特性','link':'鏈路、連線','depend on':'取決於、依賴','plan':'規劃'
+};
+const GRE = new RegExp('\\b(' +
+  Object.keys(GLOSS).sort((a,b)=>b.length-a.length)
+    .map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|') +
+  ')(s|es|ed|ing)?\\b', 'gi');
+/* 把英文句子裡查得到的字包成可點讀的 <i> */
+function gl(t){
+  return String(t).replace(GRE, (m, base)=>{
+    const zh = GLOSS[base.toLowerCase()];
+    if(!zh) return m;
+    return `<i class="gw" data-zh="${zh}" onclick="gw(event,this)">${m}</i>`;
+  });
+}
+function gw(e, el){
+  e.stopPropagation(); e.preventDefault();
+  say(el.textContent);
+  document.querySelectorAll('.gw.on').forEach(x=>{ if(x!==el) x.classList.remove('on'); });
+  el.classList.toggle('on');
+}
+
+
+/* ═══════════════════════════════════════════
+   關卡畫面
+   ═══════════════════════════════════════════ */
+let simOK=false, quizState=null;
+
+/* 每次出題都把選項順序打散，正解不會固定在同一個位置 */
+function shuffleQ(q){
+  const idx=q[1].map((_,i)=>i);
+  for(let i=idx.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [idx[i],idx[j]]=[idx[j],idx[i]];
+  }
+  return [q[0], idx.map(i=>q[1][i]), idx.indexOf(q[2]), q[3]];
+}
+function shuffleBank(raw){
+  const out=[shuffleQ(raw[0])];
+  for(let k=1;k<raw.length;k++){
+    let q, guard=0;
+    do { q=shuffleQ(raw[k]); } while(q[2]===out[k-1][2] && ++guard<12);  // 兩題正解不同位置
+    out.push(q);
+  }
+  return out;
+}
+function drawLevel(i){
+  const l=LV[i];
+  simOK=false;
+  window._lvT0=Date.now();
+  // 適性：前一關第一次就全對 → 本關出進階題
+  const prev = i>0 ? LV[i-1].key : null;
+  const strong = prev && P.score[prev]===2 && !P.hints[prev];
+  const raw = strong ? l.quiz.adv : l.quiz.basic;
+  const bank = shuffleBank(raw);
+  quizState={lv:l, bank, answered:[false,false], correct:0, level: strong?'進階':'基礎'};
+
+  document.getElementById('lv').innerHTML = `
+  <div class="card sh" style="--c:${l.c};margin-top:18px">
+    <span class="chip" style="--c:${l.c}">MOD 0${i+1} · ${l.en.toUpperCase()}</span>
+    <span class="src">${l.bk}</span>
+    <h2 class="ttl">${l.ico}　${l.title}</h2>
+    <div class="lead">${l.lead}</div>
+  </div>
+
+  <div class="card" style="--c:${l.c}">
+    <div class="step-h"><div class="step-n">1</div><div class="step-t">學 · 三個重點</div></div>
+    <p class="sub" style="margin-bottom:10px">只有三句話。讀懂這三句，後面的題目就推得出來，不必硬背。</p>
+    <ol class="prin">${l.why.map(x=>`<li>${x}</li>`).join('')}</ol>
+    <details class="more"><summary>🔍 想拿<b>進階題</b>的再看這一段</summary><div>${l.more}</div></details>
+
+    <div class="step-h"><div class="step-n">2</div><div class="step-t">比 · 一張表看懂差別</div></div>
+    <div class="tbw"><table class="ktb">
+      <thead><tr>${l.tb[0].map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+      <tbody>${l.tb.slice(1).map(r=>`<tr>${r.map((c,ci)=>
+        `<td class="${ci===0?'rh':''}">${c}</td>`).join('')}</tr>`).join('')}</tbody>
+    </table></div>
+    <p class="tbcap">👉 ${l.tbcap}</p>
+
+    <div class="step-h"><div class="step-n">3</div><div class="step-t">字 · 三個關鍵字</div></div>
+    <p class="sub" style="margin-bottom:10px">點卡片看例句與用法，按 🔊 聽發音。</p>
+    <div class="terms">${l.terms.map((t,ti)=>`
+      <div class="term" onclick="this.classList.toggle('on')">
+        <span class="spk" onclick="event.stopPropagation();say('${t[0]}')">🔊</span>
+        <div class="w">${t[0]}</div><div class="ipa">${t[1]}</div>
+        <div class="zh">${t[2]}</div><div class="ex">${gl(t[3])}</div>
+        <div class="us">${l.use[ti]}</div>
+      </div>`).join('')}</div>
+
+    <div class="step-h"><div class="step-n">4</div><div class="step-t">做 · 動手操作</div></div>
+    <div class="sim" id="sim"></div>
+    <button class="hintbtn" onclick="hint('${l.key}')">需要提示？</button>
+    <div class="hintbox hide" id="hintbox">💡 ${l.sim.hint}</div>
+
+    <div class="step-h"><div class="step-n">5</div><div class="step-t">測 · 兩題</div>
+      <span class="badge ${strong?'adv':'bas'}">${quizState.level}題</span></div>
+    <p class="sub" id="gltip" style="margin-bottom:8px">🔤 英文字下面有<b>虛線</b>的可以點 —— 會念出來並顯示中文。點選項的其他地方才算作答。</p>
+    <div id="quiz" class="hide">${bank.map((q,qi)=>`
+      <div class="q"><div class="qt">${qi+1}. ${gl(q[0])}</div>
+        ${q[1].map((o,oi)=>`<button class="opt" onclick="ans(${qi},${oi})">${gl(o)}</button>`).join('')}
+        <div class="fb" id="fb${qi}"></div></div>`).join('')}
+    </div>
+    <p id="quizlock" class="sub" style="margin-top:4px">⬆️ 先完成上面的操作，測驗才會出現。答題前可以往上翻回「原理」和對照表。</p>
+
+    <div class="row">
+      <button class="go sec" onclick="go(-1)">← 回地圖</button>
+      <button class="go" id="next" disabled onclick="finish(${i})">完成這一關 →</button>
+    </div>
+  </div>`;
+  buildSim(l);
+}
+function hint(k){
+  document.getElementById('hintbox').classList.remove('hide');
+  P.hints[k]=true; save();
+}
+
+/* ═══════════════════════════════════════════
+   互動模擬
+   ═══════════════════════════════════════════ */
+function simDone(txt){
+  simOK=true;
+  document.getElementById('quiz').classList.remove('hide');
+  document.getElementById('quizlock').classList.add('hide');
+  const m=document.getElementById('msg'); if(m){m.className='msg ok'; m.innerHTML='✅ '+txt;}
+}
+function buildSim(l){
+  const s=l.sim, el=document.getElementById('sim');
+
+  /* ══ MOD 01 姿態控制：先選對裝置，再把自旋歸零 ══ */
+  if(s.type==='aocs'){
+    el.innerHTML=`<div class="goal">🎯 衛星正以 +45°/s 翻滾，太陽能板忽亮忽暗。把它停下來。</div>
+      <div class="stepq" id="q1"><b>第 1 步</b>　要讓衛星停止翻滾，<u>不噴任何推進劑、也不改變軌道</u>，該用哪一個裝置？
+        <div class="pick">
+          <button onclick="dev(0)">🌀 反應輪 Reaction wheel</button>
+          <button onclick="dev(1)">🔥 推進器 Thruster</button>
+          <button onclick="dev(2)">🧲 磁力棒 Magnetorquer</button>
+        </div></div>
+      <div id="q2" class="hide">
+        <div class="stepq"><b>第 2 步</b>　轉動反應輪，把衛星自旋降到 0。注意兩個數字永遠<u>反向</u>。</div>
+        <div class="readout">
+          <div class="ro"><b>SATELLITE SPIN 衛星自旋</b><span id="sp">+45.0</span> °/s</div>
+          <div class="ro"><b>WHEEL 反應輪</b><span id="wh">0</span> RPM</div>
+        </div>
+        <div class="stage satstage">
+          <svg class="satsvg" viewBox="0 0 300 140" id="satSvg">
+            <g id="satBody">
+              <!-- 太陽能板（左） -->
+              <g stroke="#0E1437" stroke-width="2.5">
+                <rect x="14" y="48" width="86" height="44" rx="3" fill="#2EC4F1"/>
+                <line x1="14" y1="70" x2="100" y2="70"/>
+                <line x1="43" y1="48" x2="43" y2="92"/>
+                <line x1="71" y1="48" x2="71" y2="92"/>
+              </g>
+              <!-- 太陽能板（右） -->
+              <g stroke="#0E1437" stroke-width="2.5">
+                <rect x="200" y="48" width="86" height="44" rx="3" fill="#2EC4F1"/>
+                <line x1="200" y1="70" x2="286" y2="70"/>
+                <line x1="229" y1="48" x2="229" y2="92"/>
+                <line x1="257" y1="48" x2="257" y2="92"/>
+              </g>
+              <!-- 支臂 -->
+              <rect x="100" y="66" width="22" height="8" fill="#8A93B8" stroke="#0E1437" stroke-width="2"/>
+              <rect x="178" y="66" width="22" height="8" fill="#8A93B8" stroke="#0E1437" stroke-width="2"/>
+              <!-- 本體（金色 MLI） -->
+              <rect x="120" y="40" width="60" height="60" rx="7" fill="#FFC43D" stroke="#0E1437" stroke-width="3"/>
+              <rect x="126" y="46" width="48" height="10" rx="2" fill="#E0A520"/>
+              <!-- 天線 -->
+              <line x1="150" y1="40" x2="150" y2="22" stroke="#0E1437" stroke-width="3"/>
+              <path d="M132 22 A 18 13 0 0 1 168 22 Z" fill="#F1F5FF" stroke="#0E1437" stroke-width="2.5"/>
+              <!-- 酬載鏡頭 -->
+              <circle cx="150" cy="104" r="7" fill="#141B4D" stroke="#0E1437" stroke-width="2.5"/>
+              <!-- 反應輪（在本體內，會轉） -->
+              <g id="satWheel">
+                <circle cx="150" cy="70" r="17" fill="#F1F5FF" stroke="#0E1437" stroke-width="2.5"/>
+                <circle cx="150" cy="70" r="4" fill="#0E1437"/>
+                <g stroke="#FF5E5B" stroke-width="3.5" stroke-linecap="round">
+                  <line x1="150" y1="70" x2="150" y2="56"/>
+                  <line x1="150" y1="70" x2="162" y2="77"/>
+                  <line x1="150" y1="70" x2="138" y2="77"/>
+                </g>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div class="satlab">🔴 本體中央的紅色三叉就是<b>反應輪</b>　—　注意它和衛星本體永遠反向轉</div>
+        <input type="range" min="-6000" max="0" value="0" id="rng" oninput="wheel(this.value)">
+        <div class="rng-lab"><span>−6000 RPM</span><span>0</span></div>
+      </div>
+      <div class="msg" id="msg">先回答第 1 步。</div>`;
+    window.dev=(i)=>{
+      const m=document.getElementById('msg');
+      if(i===0){
+        document.getElementById('q1').classList.add('ok-box');
+        document.getElementById('q2').classList.remove('hide');
+        m.className='msg ok';
+        m.innerHTML='✅ 對。反應輪只吃電，不噴東西、也不改變軌道 —— 日常指向都靠它。現在把自旋降到 0。';
+      }else if(i===1){
+        m.className='msg bad';
+        m.innerHTML='❌ 推進器會<b>噴出推進劑</b>：帶上去就那麼多，用完任務就結束，而且會改變軌道。只是要轉向，不該用它。';
+      }else{
+        m.className='msg bad';
+        m.innerHTML='❌ 磁力棒借的是地球磁場，力矩很小、反應很慢。它的工作是慢慢<b>卸掉輪子累積的角動量</b>，不是緊急止旋。';
+      }
+    };
+    window.wheel=(v)=>{
+      v=+v;
+      const spin=45+v*0.01;
+      document.getElementById('wh').textContent=v;
+      document.getElementById('sp').textContent=(spin>=0?'+':'')+spin.toFixed(1);
+      const body=document.getElementById('satBody'), wh=document.getElementById('satWheel');
+      // 本體：自旋越快轉越快，方向由正負決定；接近 0 就停住
+      if(Math.abs(spin)<=0.6){ body.classList.remove('spinA','spinB'); }
+      else{
+        body.classList.remove('spinA','spinB');
+        body.classList.add(spin>0?'spinA':'spinB');
+        body.style.setProperty('--t',(360/Math.abs(spin)/8).toFixed(2)+'s');
+      }
+      // 反應輪：轉速越高轉越快，方向永遠與本體相反
+      if(v===0){ wh.classList.remove('spinA','spinB'); }
+      else{ wh.classList.remove('spinA'); wh.classList.add('spinB');
+        wh.style.setProperty('--t',(2400/Math.abs(v)).toFixed(2)+'s'); }
+      const m=document.getElementById('msg');
+      if(simOK) return;
+      if(Math.abs(spin)<=0.6){
+        simDone('自旋歸零！輪子以 −4500 RPM 轉動，衛星就停住了 —— 這就是<b>角動量守恆</b>：'
+          +'輪子往一邊轉，本體往反方向轉，全程沒有噴出任何東西。');
+      }else if(spin<-0.6){
+        m.className='msg warn';
+        m.innerHTML='⚠️ 轉過頭了，衛星現在往<b>反方向</b>翻滾。往右回一點。';
+      }else{
+        m.className='msg';
+        m.innerHTML=`還在翻滾 ${spin.toFixed(1)}°/s。輪子要再往負的方向轉。`;
+      }
+    };
+  }
+
+  /* ══ MOD 02 整測廠房：安全互鎖 ＋ Test as You Fly ══ */
+  if(s.type==='ait'){
+    el.innerHTML=`<div class="goal">🎯 把這顆衛星從無塵室一路推到出廠 —— 六個站點，每一站都要做對一個判斷。</div>
+      <div class="chambers" id="chs"></div>
+      <div id="stn"></div>
+      <div class="msg" id="msg">從第一站開始。</div>`;
+    window._si=0; window._err=0;
+    const drawChs=()=>{
+      document.getElementById('chs').innerHTML = s.st.map((c,i)=>
+        `<div class="ch ${i===window._si?'cur':''} ${i<window._si?'ok':''}">
+           <div class="ci">${i<window._si?'✅':c.ic}</div>
+           <div class="cn">${c.nm}</div><div class="cc">${c.en}</div></div>`).join('');
+    };
+    const report=()=>{
+      document.getElementById('stn').innerHTML='';
+      drawChs();
+      const e=window._err;
+      simDone(`<b>出廠放行。</b>六個站點全部通過 —— 這就是一顆衛星真正離開整測廠房前走過的路。`
+        +`<br>過程中判斷失誤 <b>${e}</b> 次。`
+        +(e===0?'一次都沒錯 —— 你抓到整測的邏輯了。'
+               :'在地面錯了可以重來，在太空錯了沒有第二次。'));
+    };
+    const station=()=>{
+      drawChs();
+      const c=s.st[window._si], box=document.getElementById('stn');
+      if(!c) return report();
+      if(c.acoustic){
+        box.innerHTML=`<div class="stepq"><b>站點 ${window._si+1}／${s.st.length}　${c.nm} ${c.en}</b><br>
+            執行音震測試。整流罩內的真實音壓是 <b>${s.lo}–${s.hi} dB</b>。
+            測試前必須先裝上太陽能板減震護具與聲壓控制麥克風。
+            <div class="pick"><button id="guard" onclick="guardOn()">🔧 安裝減震護具與控制麥克風</button></div></div>
+          <div class="readout">
+            <div class="ro"><b>SOUND LEVEL 音壓</b><span id="db">95</span> dB</div>
+            <div class="ro"><b>防護狀態</b><span id="gs" style="font-size:15px">未安裝</span></div>
+          </div>
+          <input type="range" min="90" max="155" value="95" id="rng" oninput="dbset(this.value)">
+          <div class="rng-lab"><span>90 dB 不足</span><span>🎯 ${s.lo}–${s.hi}</span><span>155 dB 過度</span></div>`;
+        window._guard=false; window._lock=0;
+        return;
+      }
+      box.innerHTML=`<div class="stepq"><b>站點 ${window._si+1}／${s.st.length}　${c.nm} ${c.en}</b><br>${c.q}</div>
+        <div class="pick">${c.o.map((o,oi)=>
+          `<button onclick="stPick(${oi})">${o[0]}</button>`).join('')}</div>`;
+    };
+    const nextStn=(txt)=>{
+      window._si++;
+      const m=document.getElementById('msg');
+      m.className='msg ok'; m.innerHTML='✅ '+txt;
+      if(window._si>=s.st.length) report(); else station();
+    };
+    window.stPick=(oi)=>{
+      if(simOK) return;
+      const c=s.st[window._si], o=c.o[oi], m=document.getElementById('msg');
+      if(o[1]) return nextStn(o[2]);
+      window._err++;
+      m.className='msg bad'; m.innerHTML='❌ '+o[2];
+    };
+    window.guardOn=()=>{
+      window._guard=true;
+      const b=document.getElementById('guard');
+      b.classList.add('done'); b.disabled=true;
+      document.getElementById('gs').textContent='已安裝 ✔';
+      document.getElementById('gs').style.color='var(--mint)';
+      const m=document.getElementById('msg');
+      m.className='msg ok'; m.innerHTML='✅ 防護就緒。現在把音壓調到飛行狀態的 '+s.lo+'–'+s.hi+' dB。';
+    };
+    window.dbset=(v)=>{
+      v=+v;
+      document.getElementById('db').textContent=v;
+      const m=document.getElementById('msg');
+      if(simOK) return;
+      if(!window._guard){
+        document.getElementById('rng').value=95;
+        document.getElementById('db').textContent=95;
+        if(!window._lock){ window._lock=1; window._err++; }
+        m.className='msg bad';
+        m.innerHTML='🚨 <b>安全互鎖警報</b>：還沒裝減震護具就加音壓，太陽能板和鏡片會當場震裂。請先按上面的按鈕。';
+        return;
+      }
+      if(v>=s.lo && v<=s.hi){
+        nextStn(`音壓 ${v} dB，正好是飛行狀態。<b>Test as You Fly</b>：嚴苛要恰如其分 —— 不足會漏掉瑕疵，過度會親手弄壞飛行體。`);
+      }else if(v<s.lo){
+        m.className='msg warn';
+        m.innerHTML=`⚠️ ${v} dB <b>不足</b>。比真實發射還溫柔，有瑕疵的焊點撐得過測試、卻撐不過發射。`;
+      }else{
+        m.className='msg bad';
+        m.innerHTML=`❌ ${v} dB <b>過度測試</b>。這比火箭還兇，等於用測試親手弄壞一顆上億元的衛星。`;
+      }
+    };
+    station();
+  }
+
+  if(s.type==='tcs'){
+    el.innerHTML=`<div class="goal">🎯 在<b>向陽面</b>與<b>地影面</b>各找出正確的熱控組合，讓核心溫度維持在 −10 ~ +25°C。</div>
+      <div class="readout">
+        <div class="ro"><b>ORBIT TIME 軌道時間</b><span id="mi">20</span> min</div>
+        <div class="ro"><b>外部環境</b><span id="ev" style="font-size:15px">☀️ +120°C</span></div>
+        <div class="ro"><b>CORE 核心溫度</b><span id="tc">+120</span> °C</div>
+        <div class="ro"><b>已驗證</b><span id="vz">0</span> / 2</div>
+      </div>
+      <input type="range" min="0" max="100" value="20" id="rng" oninput="orb(this.value)">
+      <div class="rng-lab"><span>☀️ 0–50 min 向陽</span><span>🌑 51–100 min 地影</span></div>
+      <div class="switches">
+        <button class="sw" id="sw0" onclick="tog(0)"><b>🧥 MLI 多層絕熱衣</b><span>擋住外部輻射</span><i>OFF</i></button>
+        <button class="sw" id="sw1" onclick="tog(1)"><b>❄️ 輻射散熱片</b><span>把廢熱丟出去</span><i>OFF</i></button>
+        <button class="sw" id="sw2" onclick="tog(2)"><b>🔥 電加熱器</b><span>低溫時補熱</span><i>OFF</i></button>
+      </div>
+      <div class="msg" id="msg">先看現在是向陽還是地影，再決定要開哪幾個。</div>`;
+    window._sw=[false,false,false]; window._vz={sun:false,ecl:false};
+    const calc=()=>{
+      const t=+document.getElementById('rng').value;
+      const sun=t<=50, [M,R,H]=window._sw;
+      const core = sun ? 120-(M?70:0)-(R?30:0)+(H?25:0)
+                       : -100+(M?70:0)+(H?45:0)-(R?25:0);
+      document.getElementById('mi').textContent=t;
+      document.getElementById('ev').textContent=sun?'☀️ +120°C':'🌑 −100°C';
+      const tc=document.getElementById('tc');
+      tc.textContent=(core>0?'+':'')+Math.round(core);
+      const good = core>=-10 && core<=25;
+      tc.style.color = good?'var(--mint)':(core>25?'var(--coral)':'var(--sky)');
+      const m=document.getElementById('msg');
+      if(simOK) return;
+      if(good){
+        if(sun) window._vz.sun=true; else window._vz.ecl=true;
+        const n=(window._vz.sun?1:0)+(window._vz.ecl?1:0);
+        document.getElementById('vz').textContent=n;
+        if(n===2){
+          simDone('兩個時段都穩住了！<br>向陽面：MLI 擋外熱＋散熱片排廢熱，加熱器關。'
+            +'地影面：MLI 保溫＋加熱器補熱，散熱片關。<br><b>同一套硬體，不同時段要不同策略</b> —— 這就是熱控設計。');
+          return;
+        }
+        m.className='msg ok';
+        m.innerHTML=`✅ ${sun?'向陽面':'地影面'}達標（${Math.round(core)}°C）。把時間軸拉到${sun?'地影區（51 分以後）':'向陽區（50 分以前）'}，再做一次。`;
+      }else if(core>25){
+        m.className='msg bad';
+        m.innerHTML='🔥 <b>核心過熱</b>：'+(!M?'沒穿 MLI，外面 +120°C 直接烤進來。':'')
+          +(!R?'散熱片沒開，裡面的廢熱排不掉。':'')+(H?'加熱器還開著，等於火上加油。':'')
+          +'<br><span class="zh">晶片與鋰電池超過 +60°C 會熱失控。</span>';
+      }else{
+        m.className='msg bad';
+        m.innerHTML='🧊 <b>核心過冷</b>：'+(!M?'沒穿 MLI，裡面的熱一直流失。':'')
+          +(!H?'加熱器沒開，電池撐不住這個低溫。':'')+(R?'散熱片還開著，在拼命往外丟熱。':'');
+      }
+    };
+    window.orb=()=>calc();
+    window.tog=(i)=>{
+      window._sw[i]=!window._sw[i];
+      const b=document.getElementById('sw'+i);
+      b.classList.toggle('on',window._sw[i]);
+      b.querySelector('i').textContent=window._sw[i]?'ON':'OFF';
+      calc();
+    };
+    calc();
+  }
+
+  /* ══ MOD 04 影像：任務決定你要哪一種影像 ══ */
+  if(s.type==='eye'){
+    const TASK=[
+      ['🏫 清點操場上停了幾台車',0,
+       '要數出一台一台的車，靠的是<b>形狀</b>。黑白 2 公尺才有足夠的銳利度。'],
+      ['🌾 判斷這片稻田哪一區生病了',1,
+       '作物生病會先反映在<b>反射光譜</b>上 —— 這是顏色的工作，不是銳利度。'],
+      ['⛰️ 做一張土石流救災地圖，既要看清楚道路，也要分辨植被與泥流',2,
+       '又要形狀又要顏色，就得把兩者<b>融合</b>：用 2m 黑白帶細節，用 4m 彩色填顏色。']
+    ];
+    el.innerHTML=`<div class="goal">🎯 三個任務，各要選一種影像。想清楚：靠形狀，還是靠顏色？</div>
+      <div class="taskq" id="tq"></div>
+      <div class="pick">
+        <button onclick="pickImg(0)">⬜ 黑白 2m　Panchromatic</button>
+        <button onclick="pickImg(1)">🎨 彩色 4m　Multispectral</button>
+        <button onclick="pickImg(2)">✨ 影像融合　Pan-sharpening</button>
+      </div>
+      <div class="imgdemo"><div class="half pan">2m 黑白<br><small>銳利・無顏色</small></div>
+        <div class="half mul">4m 彩色<br><small>有顏色・鋸齒</small></div></div>
+      <div class="msg" id="msg"></div>`;
+    window._t=0; window._tw=0;
+    const show=()=>{document.getElementById('tq').innerHTML=
+      `<b>任務 ${window._t+1} / 3</b>　${TASK[window._t][0]}`;};
+    show();
+    window.pickImg=(i)=>{
+      if(simOK) return;
+      const t=TASK[window._t], m=document.getElementById('msg');
+      if(i===t[1]){
+        window._t++;
+        if(window._t>=TASK.length){
+          simDone('三個任務都判斷正確！<br><b>解析度和光譜是兩個不同的維度</b>：'
+            +'要數東西看解析度，要辨狀態看顏色，兩者都要就融合。齊柏林衛星 84% 關鍵元件台灣自製。');
+          return;
+        }
+        m.className='msg ok'; m.innerHTML='✅ '+t[2]; show();
+      }else{
+        window._tw++;
+        m.className='msg bad';
+        m.innerHTML = i===0 ? '❌ 黑白 2m 很銳利，但<b>完全沒有顏色資訊</b>。這個任務看得出形狀卻判斷不了狀態。'
+          : i===1 ? '❌ 彩色 4m 有顏色，但一格就 4 公尺 —— <b>比一台車還大</b>，細節出不來。'
+          : '❌ 融合會花掉額外的處理時間與頻寬。這個任務用單一種影像就夠了，不需要大費周章。';
+      }
+    };
+  }
+
+  /* ══ MOD 05 掩星：從訊號反演天氣 ══ */
+  if(s.type==='ro'){
+    const OBS=[
+      ['α = 0.8°　延遲 +12 ns',0,'彎曲最小、延遲最短 → 空氣乾燥，<b>晴朗</b>。'],
+      ['α = 1.9°　延遲 +50 ns',1,'中等彎曲 → 水氣明顯增加，是<b>梅雨鋒面</b>的典型值。'],
+      ['α = 2.9°　延遲 +88 ns',2,'彎曲與延遲都最大 → 水氣極濃，<b>強颱</b>環流。']
+    ];
+    el.innerHTML=`<div class="goal">🎯 福衛七號收到三道穿過大氣的 GPS 訊號。從彎曲角反推：各是什麼天氣？</div>
+      <div class="obs" id="obs"></div>
+      <div class="pick">
+        <button onclick="pickW(0)">☀️ 晴朗乾燥（水氣 15%）</button>
+        <button onclick="pickW(1)">🌧️ 梅雨鋒面（水氣 55%）</button>
+        <button onclick="pickW(2)">🌀 強烈颱風（水氣 92%）</button>
+      </div>
+      <div class="raybox"><div class="ray" id="ray"></div></div>
+      <div class="msg" id="msg">水氣越多，折射率越大，訊號彎得越厲害、延遲也越久。</div>`;
+    window._o=0;
+    const show=()=>{
+      document.getElementById('obs').innerHTML=
+        `<b>觀測 ${window._o+1} / 3</b><span>${OBS[window._o][0]}</span>`;
+      document.getElementById('ray').style.setProperty('--bend',(OBS[window._o][1]+1)*14+'px');
+    };
+    show();
+    window.pickW=(i)=>{
+      if(simOK) return;
+      const o=OBS[window._o], m=document.getElementById('msg');
+      if(i===o[1]){
+        window._o++;
+        if(window._o>=OBS.length){
+          simDone('三組都反推正確！<br>掩星觀測<b>不是直接量溫濕度</b>，而是量訊號彎了多少、延遲多久，'
+            +'再用物理關係<b>反演</b>出整層大氣的剖面。每天全球約 4,000 點 —— 連沒有測站的遠洋都蓋得到。');
+          return;
+        }
+        m.className='msg ok'; m.innerHTML='✅ '+o[2]; show();
+      }else{
+        m.className='msg bad';
+        m.innerHTML='❌ 再比一次三組數據的大小。<b>彎曲角越大＝水氣越多</b>，這一組在三組裡排第幾？';
+      }
+    };
+  }
+
+  /* ══ MOD 06 過境：10 分鐘資源分配，順序有物理原因 ══ */
+  if(s.type==='pass'){
+    const ACT=[
+      ['📡 天線對準（S-Band）',2,'K'],
+      ['📥 接收遙測健康資料（S-Band）',2,'K'],
+      ['📤 上傳控制指令（S-Band）',2,'K'],
+      ['🖼️ 下載 4K 影像（X-Band）',4,'R']
+    ];
+    el.innerHTML=`<div class="goal">🎯 過境只有 10 分鐘。依正確順序完成四件事，時間剛好用完。</div>
+      <div class="readout">
+        <div class="ro"><b>TIME LEFT 剩餘時間</b><span id="tl">10:00</span></div>
+        <div class="ro"><b>BAND 目前頻段</b><span id="bd" style="font-size:15px">待命</span></div>
+        <div class="ro"><b>天線對準</b><span id="al" style="font-size:15px">未對準</span></div>
+      </div>
+      <div class="timeline"><div class="tlbar" id="tlbar"></div></div>
+      <div class="pick" id="pick">${ACT.map((a,i)=>
+        `<button data-i="${i}" onclick="act(${i})">${a[0]}　<small>${a[1]} 分</small></button>`).join('')}</div>
+      <div class="msg" id="msg">想一想：X-Band 波束很窄，沒對準就開會怎樣？</div>`;
+    window._left=10; window._aligned=false; window._done=[];
+    window.act=(i)=>{
+      if(simOK) return;
+      const a=ACT[i], m=document.getElementById('msg');
+      if(window._done.includes(i)) return;
+      if(i===3 && !window._aligned){
+        m.className='msg bad';
+        m.innerHTML='❌ <b>訊號射偏，掉包。</b> X-Band 波束極窄，天線沒先對準就開高速下載，資料根本收不到。'
+          +'<br><span class="zh">先用波束寬、抗干擾強的 S-Band 鎖定衛星。</span>';
+        return;
+      }
+      if(i!==0 && !window._aligned){
+        m.className='msg bad';
+        m.innerHTML='❌ 還沒對準天線。任何通聯之前，第一件事都是<b>鎖定並對準</b>。';
+        return;
+      }
+      window._done.push(i); window._left-=a[1];
+      if(i===0){ window._aligned=true;
+        document.getElementById('al').textContent='已對準 ✔';
+        document.getElementById('al').style.color='var(--mint)'; }
+      document.getElementById('bd').textContent=a[2]==='K'?'S-Band':'X-Band';
+      document.getElementById('tl').textContent=window._left+':00';
+      document.getElementById('tlbar').style.width=((10-window._left)/10*100)+'%';
+      const b=document.querySelector(`#pick button[data-i="${i}"]`);
+      b.classList.add('done'); b.disabled=true;
+      if(window._done.length===ACT.length){
+        simDone('四件事全部完成，10 分鐘剛好用完。<br><b>順序不是規定，是物理</b>：'
+          +'S-Band 波束寬、容錯高，先用它鎖定對準；X-Band 波束窄、速度快，對準之後才敢開。'
+          +'指令要<b>可靠</b>，影像要<b>快</b> —— 不同需求用不同波段。');
+      }else{
+        m.className='msg ok';
+        m.innerHTML=`✅ 完成「${a[0]}」，剩下 ${window._left} 分鐘。`;
+      }
+    };
+  }
+}
+
+/* ═══════════════════════════════════════════
+   測驗
+   ═══════════════════════════════════════════ */
+function ans(qi,oi){
+  const q=quizState.bank[qi];
+  if(quizState.answered[qi]) return;
+  quizState.answered[qi]=true;
+  const box=document.querySelectorAll('#quiz .q')[qi];
+  const opts=box.querySelectorAll('.opt');
+  opts.forEach(o=>o.classList.add('lk'));   // 不用 disabled，否則裡面的點讀字會失效
+  const fb=document.getElementById('fb'+qi);
+  if(oi===q[2]){
+    opts[oi].classList.add('right'); quizState.correct++;
+    fb.className='fb show good'; fb.innerHTML='✅ 答對了！'+q[3];
+  }else{
+    opts[oi].classList.add('wrong'); opts[q[2]].classList.add('right');
+    fb.className='fb show no'; fb.innerHTML='正解是上面綠色那一個。'+q[3];
+  }
+  if(quizState.answered.every(Boolean)){
+    document.getElementById('next').disabled=false;
+  }
+}
+function finish(i){
+  const l=LV[i];
+  if(!P.done.includes(l.key)) P.done.push(l.key);
+  P.score[l.key]=Math.max(P.score[l.key]||0, quizState.correct);   // 重做只取最好的
+  P.tries[l.key]=(P.tries[l.key]||0)+1;
+  save();
+  const secs=Math.round((Date.now()-(window._lvT0||Date.now()))/1000);
+  report('作答紀錄', H_LOG, [stamp(), ...who(),
+    `MOD 0${i+1} ${l.nm}`, quizState.level, quizState.correct, 2,
+    P.hints[l.key]?'是':'否', secs, P.tries[l.key]]);
+  if(P.done.length===LV.length){
+    const t=totals();
+    report('總成績', H_SUM, [stamp(), ...who(), t.pct, t.got, t.max, t.hints,
+      P.t0?Math.round((Date.now()-P.t0)/60000):'',
+      LV.reduce((a,l)=>a+(P.tries[l.key]||0),0), t.pct===100?'★ 滿分':'未滿分']);
+  }
+  if(i+1<LV.length && !P.done.includes(LV[i+1].key)) go(i+1);
+  else if(P.done.length===LV.length) go(LV.length);
+  else go(-1);
+}
+
+/* ═══════════════════════════════════════════
+   證書
+   ═══════════════════════════════════════════ */
+function totals(){
+  const max=LV.length*2;
+  const got=LV.reduce((a,l)=>a+(P.score[l.key]||0),0);
+  const hints=LV.filter(l=>P.hints[l.key]).length;
+  let rank='見習工程師 Trainee', rc='var(--sky)';
+  if(got>=max-1 && hints===0){ rank='資深航太工程師 Senior Space Engineer'; rc='var(--sun)'; }
+  else if(got>=max*0.75){ rank='航太工程師 Space Engineer'; rc='var(--mint)'; }
+  const pct=Math.round(got/max*100);
+  const weak=LV.filter(l=>(P.score[l.key]||0)<2);
+  return {max,got,hints,rank,rc,pct,weak};
+}
+function drawCert(){
+  const t=totals(), full=(t.pct===100);
+  document.getElementById('cert').innerHTML=`
+  <div class="card sh" style="--c:var(--${full?'sun':'sky'});margin-top:18px">
+    <span class="chip" style="--c:var(--${full?'sun':'sky'})">${full?'MISSION COMPLETE':'ALMOST THERE'}</span>
+    <h2 class="ttl">${full?'🏆 六大模組全部滿分！':'六大模組都走完了，但還沒滿分'}</h2>
+    <p class="sub">${full
+      ?'從姿態控制到過境通聯，你已經走完一顆台灣衛星的完整能力地圖。'
+      :'電子證書要<b>六關全部答對（100 分）</b>才發。把下面沒滿分的關卡重做一次就好 —— 題目會再出一次。'}</p>
+    <div class="scoreline">
+      <div class="sc"><b>總分</b><span style="color:${full?'var(--sunD)':'var(--coralD)'}">${t.pct}</span></div>
+      <div class="sc"><b>答對題數</b><span>${t.got}/${t.max}</span></div>
+      <div class="sc"><b>使用提示</b><span>${t.hints}</span></div>
+      <div class="sc"><b>總用時</b><span>${P.t0?Math.round((Date.now()-P.t0)/60000):'—'} 分</span></div>
+    </div>
+    ${full ? `
+      <div class="lead" style="background:#fff;border-color:${t.rc}">
+        你的等級：<b style="color:${t.rc}">${t.rank}</b>　|
+        ${P.id?`${P.id.cls}　${P.id.no} 號　${P.id.name}`:''}
+      </div>
+      <div class="row">
+        <button class="go" onclick="dlPDF()">⬇️ 下載電子證書 PDF</button>
+        <button class="go sec" onclick="dlPNG()">存成 PNG</button>
+        <button class="go sec" onclick="go(-1)">回地圖</button>
+      </div>`
+    : `
+      <div class="redo">
+        <b>還沒滿分的關卡（${t.weak.length} 關）</b>
+        ${t.weak.map(l=>{
+          const i=LV.indexOf(l);
+          return `<button class="rd" onclick="go(${i})">${l.ico} MOD 0${i+1} ${l.nm}
+            <span>目前 ${P.score[l.key]||0}/2</span></button>`;
+        }).join('')}
+      </div>
+      <div class="row"><button class="go sec" onclick="go(-1)">回地圖</button></div>`}
+  </div>
+  ${full?'<div class="card"><canvas id="cv" width="2000" height="1414"></canvas></div>':''}`;
+  if(full){ paint(); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(paint); }
+}
+function certName(){
+  const w=who();
+  return 'TASA證書_'+(w[0]||'')+(w[1]?'_'+w[1]:'')+'_'+(w[2]||'student');
+}
+function dlPDF(){
+  const c=document.getElementById('cv'); if(!c) return;
+  const img=c.toDataURL('image/jpeg',0.94);
+  const J=(window.jspdf||{}).jsPDF;
+  if(!J){
+    alert('PDF 元件沒載入（可能是沒有網路）。先幫你存成 PNG。');
+    return dlPNG();
+  }
+  const pdf=new J({orientation:'landscape', unit:'mm', format:'a4'});
+  pdf.addImage(img,'JPEG',0,0,297,210);       // 畫布本來就是 A4 比例，滿版輸出
+  pdf.save(certName()+'.pdf');
+}
+function dlPNG(){
+  const c=document.getElementById('cv'); if(!c) return;
+  const a=document.createElement('a');
+  a.download=certName()+'.png'; a.href=c.toDataURL('image/png'); a.click();
+}
+function paint(){
+  const c=document.getElementById('cv'); if(!c) return;
+  const x=c.getContext('2d'), t=totals(), w=who();
+  const nm=w[2]||'＿＿＿＿';
+  const W=2000, H=1414, CX=W/2;
+
+  /* 品牌色 */
+  const NAVY='#141B4D', NAVY2='#2A3470', MUTE='#6B7394',
+        GOLD='#C08A14', GOLD2='#E8C25A', CYAN='#2EC4F1', PAPER='#FFFFFF';
+
+  /* ── 小工具 ───────────────────────────── */
+  const ls=(t,cx,y,sp)=>{                       // 字距加寬，置中
+    const a=[...t]; let tw=0;
+    a.forEach(ch=>tw+=x.measureText(ch).width+sp); tw-=sp;
+    let px=cx-tw/2;
+    a.forEach(ch=>{ const cw=x.measureText(ch).width;
+      x.fillText(ch,px+cw/2,y); px+=cw+sp; });
+    return tw;
+  };
+  const arc=(t,cx,cy,r,a0,a1,flip)=>{           // 沿著圓弧排字
+    const a=[...t], n=a.length, st=(a1-a0)/Math.max(n-1,1);
+    a.forEach((ch,i)=>{ const an=a0+st*i;
+      x.save(); x.translate(cx+Math.cos(an)*r, cy+Math.sin(an)*r);
+      x.rotate(an+(flip?-Math.PI/2:Math.PI/2)); x.fillText(ch,0,0); x.restore(); });
+  };
+  const rr=(X,Y,w0,h0,r)=>{ x.beginPath(); x.moveTo(X+r,Y);
+    x.arcTo(X+w0,Y,X+w0,Y+h0,r); x.arcTo(X+w0,Y+h0,X,Y+h0,r);
+    x.arcTo(X,Y+h0,X,Y,r); x.arcTo(X,Y,X+w0,Y,r); x.closePath(); };
+  const line=(x0,y0,x1,y1,col,lw)=>{ x.strokeStyle=col; x.lineWidth=lw;
+    x.beginPath(); x.moveTo(x0,y0); x.lineTo(x1,y1); x.stroke(); };
+  const diamond=(X,Y,s,col)=>{ x.fillStyle=col; x.beginPath();
+    x.moveTo(X,Y-s); x.lineTo(X+s,Y); x.lineTo(X,Y+s); x.lineTo(X-s,Y); x.closePath(); x.fill(); };
+
+  x.textAlign='center'; x.textBaseline='alphabetic';
+  x.fillStyle=PAPER; x.fillRect(0,0,W,H);
+
+  /* ── 背景：極淡的軌道水印 ─────────────── */
+  x.save(); x.globalAlpha=.05; x.strokeStyle=NAVY; x.lineWidth=2;
+  for(let i=0;i<3;i++){ x.beginPath();
+    x.ellipse(250,1300,430+i*95,300+i*66,-0.38,0,Math.PI*2); x.stroke(); }
+  x.restore();
+
+  /* ── 外框：細雙線 ─────────────────────── */
+  x.strokeStyle=NAVY; x.lineWidth=5;  x.strokeRect(34,34,W-68,H-68);
+  x.strokeStyle=GOLD; x.lineWidth=1.6; x.strokeRect(50,50,W-100,H-100);
+
+  /* ── 標頭深藍帶 ───────────────────────── */
+  const BY=50, BH=292;
+  x.fillStyle=NAVY; x.fillRect(50,BY,W-100,BH);
+  /* 帶子裡的軌道與衛星 */
+  x.save(); x.beginPath(); x.rect(50,BY,W-100,BH); x.clip();
+  x.globalAlpha=.30; x.strokeStyle=CYAN; x.lineWidth=2;
+  [[1720,150,300,112],[1720,150,420,160],[1720,150,540,208]].forEach((o,i)=>{
+    x.beginPath(); x.ellipse(o[0],BY+o[1],o[2],o[3],-0.42,0,Math.PI*2); x.stroke(); });
+  x.globalAlpha=.85; x.fillStyle=CYAN;
+  x.beginPath(); x.arc(1998-540,BY+150-96,7,0,Math.PI*2); x.fill();
+  x.beginPath(); x.arc(1498,BY+244,5,0,Math.PI*2); x.fill();
+  x.restore();
+  /* 下緣金線 */
+  line(50,BY+BH,W-50,BY+BH,GOLD,3);
+
+  x.fillStyle='#8FD9F3'; x.font='800 27px Nunito,sans-serif';
+  ls('CERTIFICATE OF ACHIEVEMENT',CX,BY+84,10);
+  x.fillStyle='#fff'; x.font='700 80px Fredoka,"Noto Sans TC",sans-serif';
+  ls('國家太空中心　六大模組認證',CX,BY+182,3);
+  x.fillStyle='#9FB0D8'; x.font='700 24px Nunito,sans-serif';
+  ls('Taiwan Space Agency　·　Aerospace Engineering & Technical English',CX,BY+238,1.6);
+
+  /* ── 茲證明 ───────────────────────────── */
+  x.fillStyle=MUTE; x.font='800 25px Nunito,"Noto Sans TC",sans-serif';
+  ls('THIS CERTIFIES THAT　茲證明',CX,BY+BH+146,3.5);
+
+  /* ── 姓名 ─────────────────────────────── */
+  x.fillStyle=NAVY; x.font='900 112px "Noto Sans TC",Fredoka,sans-serif';
+  ls(nm,CX,BY+BH+302,14);
+  const HW=Math.max(330,Math.min(620,nm.length*72));
+  line(CX-HW,BY+BH+346,CX+HW,BY+BH+346,GOLD,2.5);
+  diamond(CX-HW-16,BY+BH+346,8,GOLD);
+  diamond(CX+HW+16,BY+BH+346,8,GOLD);
+
+  x.fillStyle=NAVY2; x.font='800 32px "Noto Sans TC",sans-serif';
+  ls([w[0],w[1]?w[1]+' 號':''].filter(Boolean).join('　'),CX,BY+BH+410,4);
+
+  /* ── 完成內容 ─────────────────────────── */
+  x.fillStyle=MUTE; x.font='700 27px "Noto Sans TC",sans-serif';
+  x.fillText('已完成　姿態控制 · 整測廠房 · 軌道熱控 · 光學酬載 · 掩星氣象 · 過境通訊　共 6 模組',CX,BY+BH+478);
+
+  /* ── 三格成績 ─────────────────────────── */
+  const CW=296, CH=138, GAP=34, SY=BY+BH+534;
+  const cards=[['總分 SCORE',String(t.pct)],
+               ['答對題數 CORRECT',t.got+'/'+t.max],
+               ['使用提示 HINTS',String(t.hints)]];
+  const SX=CX-(CW*3+GAP*2)/2;
+  cards.forEach((cd,i)=>{
+    const X=SX+i*(CW+GAP);
+    x.fillStyle='#F7F9FF'; rr(X,SY,CW,CH,18); x.fill();
+    x.strokeStyle='#DCE3F5'; x.lineWidth=2.5; rr(X,SY,CW,CH,18); x.stroke();
+    if(i===0){ x.strokeStyle=GOLD; x.lineWidth=3; rr(X,SY,CW,CH,18); x.stroke(); }
+    x.fillStyle=MUTE; x.font='800 18px Nunito,"Noto Sans TC",sans-serif';
+    ls(cd[0],X+CW/2,SY+40,2.5);
+    x.fillStyle=i===0?GOLD:NAVY; x.font='900 58px Fredoka,Nunito,sans-serif';
+    x.fillText(cd[1],X+CW/2,SY+106);
+  });
+
+  /* ── 鋼印 ─────────────────────────────── */
+  const sx=1662, sy=1118, R=132;
+  const zh=t.rank.split(' ')[0], en=t.rank.replace(/^[^ ]+\s/,'').toUpperCase();
+  x.fillStyle='#FFFCF4'; x.beginPath(); x.arc(sx,sy,R-8,0,Math.PI*2); x.fill();
+  x.strokeStyle=GOLD; x.lineWidth=4;   x.beginPath(); x.arc(sx,sy,R,0,Math.PI*2); x.stroke();
+  x.strokeStyle=GOLD2; x.lineWidth=1.8; x.beginPath(); x.arc(sx,sy,R-14,0,Math.PI*2); x.stroke();
+  x.save(); x.globalAlpha=.35; x.strokeStyle=GOLD; x.lineWidth=1;
+  for(let i=0;i<48;i++){ const a=i/48*Math.PI*2;
+    x.beginPath(); x.moveTo(sx+Math.cos(a)*(R-4),sy+Math.sin(a)*(R-4));
+    x.lineTo(sx+Math.cos(a)*(R-11),sy+Math.sin(a)*(R-11)); x.stroke(); }
+  x.restore();
+  x.fillStyle=GOLD; x.font='900 17px Nunito,sans-serif';
+  arc(en,sx,sy,R-38,Math.PI*1.16,Math.PI*1.84,false);
+  x.font='900 15px Nunito,"Noto Sans TC",sans-serif';
+  arc('★　TAIWAN SPACE AGENCY　★',sx,sy,R-36,Math.PI*0.80,Math.PI*0.20,true);
+  x.fillStyle=NAVY;
+  let fs=34; x.font='900 '+fs+'px "Noto Sans TC",sans-serif';
+  while(x.measureText(zh).width>196 && fs>20){ fs-=2; x.font='900 '+fs+'px "Noto Sans TC",sans-serif'; }
+  x.fillText(zh,sx,sy+10);
+  x.strokeStyle=GOLD; x.lineWidth=1.5;
+  line(sx-46,sy+28,sx+46,sy+28,GOLD,1.5);
+  x.fillStyle=MUTE; x.font='800 14px Nunito,sans-serif'; ls('CERTIFIED',sx,sy+50,3);
+
+  /* ── 底部：日期與簽名 ─────────────────── */
+  const d=new Date(), BL=1216;
+  const col=(x0,x1,top,bot,fs)=>{
+    line(x0,BL,x1,BL,NAVY,2.5);
+    x.fillStyle=NAVY; x.font='800 '+(fs||31)+'px "Noto Sans TC",Fredoka,sans-serif';
+    x.fillText(top,(x0+x1)/2,BL-22);
+    x.fillStyle=MUTE; x.font='800 18px Nunito,"Noto Sans TC",sans-serif';
+    ls(bot,(x0+x1)/2,BL+36,3);
+  };
+  col(176,676,`${d.getFullYear()} 年 ${d.getMonth()+1} 月 ${d.getDate()} 日`,'核發日期　DATE OF ISSUE');
+  col(760,1260,'欉珊慈','指導教師　INSTRUCTOR',42);
+
+  /* ── 證書編號 ─────────────────────────── */
+  const z=v=>String(v).padStart(2,'0');
+  const no=`TASA-6M-${d.getFullYear()}${z(d.getMonth()+1)}${z(d.getDate())}-${String(w[1]||'0').padStart(3,'0')}`;
+  x.fillStyle='#A7AFC6'; x.font='800 17px Nunito,sans-serif';
+  x.textAlign='left'; ls(no,176+x.measureText(no).width/2,1330,2.4);
+  x.textAlign='center';
+}
+
+/* 啟動 */
+idFill();
+showWho();
+drawMap();
+</script>
+</body>
+</html>
